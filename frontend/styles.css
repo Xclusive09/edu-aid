@@ -1,0 +1,130 @@
+/* Custom styles for EDU_AID to extend Tailwind CSS CDN */
+/* Ensure consistency across pages: index, login, signup, dashboard */
+
+/* Chat message styles */
+.chat-message {
+    max-width: 80%;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Bot messages (left-aligned, green background) */
+.bot-message {
+    background-color: #d1fae5; /* Tailwind's green-100 */
+    margin-right: auto;
+}
+
+/* User messages (right-aligned, blue background) */
+.user-message {
+    background-color: #dbeafe; /* Tailwind's blue-100 */
+    margin-left: auto;
+}
+
+/* Progress bar animation */
+.progress-bar-inner {
+    transition: width 2s ease-in-out;
+}
+
+/* Form error messages */
+.error-message {
+    color: #ef4444; /* Tailwind's red-500 */
+    font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .chat-container {
+        height: 16rem; /* Smaller height on mobile */
+    }
+    .max-w-md {
+        max-width: 100%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+    .max-w-2xl {
+        max-width: 100%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
+
+/* Animation keyframes for fade-in */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Ensure tables are responsive */
+table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+}
+
+/* Common styles for EDU_AID platform */
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Custom animations */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+/* Custom utility classes */
+.progress-bar {
+    width: 60%;
+    transition: width 0.3s ease;
+}
+
+/* Form focus states */
+input:focus, 
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Card hover effects */
+.card-hover {
+    transition: all 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Loading states */
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

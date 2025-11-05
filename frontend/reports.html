@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - EDU_AID</title>
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body class="bg-gray-50 min-h-screen bg-pattern">
+<!-- Navigation -->
+<nav class="bg-white/90 backdrop-blur-sm shadow-xl border-b border-white/20 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mr-3 shadow-lg">
+                        <span class="text-white font-bold text-lg">E</span>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">EDU_AID</span>
+                        <p class="text-xs text-gray-500 -mt-1">Educational AI Assistant</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="dashboard.html" class="nav-link">
+                        <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+                        Dashboard
+                    </a>
+                    <a href="analytics.html" class="nav-link">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 mr-2"></i>
+                        Analytics
+                    </a>
+                    <button class="nav-link nav-link-active" id="reportsTab">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>
+                        Reports
+                    </button>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="notificationBtn" class="relative p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100/80 transition-all duration-200">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center space-x-2 p-2 rounded-xl hover:bg-gray-100/80 transition-all duration-200">
+                            <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+                                <span class="text-white text-sm font-semibold" id="userAvatar">U</span>
+                            </div>
+                            <span class="hidden md:block text-gray-700 font-medium" id="userName">User</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl border border-white/20 z-50 py-2">
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors">
+                                <i data-lucide="user" class="w-4 h-4 mr-2"></i>
+                                Profile Settings
+                            </a>
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors">
+                                <i data-lucide="settings" class="w-4 h-4 mr-2"></i>
+                                Preferences
+                            </a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <button id="logoutBtn" class="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/80 transition-colors">
+                                <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">Reports</h1>
+                <p class="text-gray-600">Generate, manage, and share comprehensive student performance reports</p>
+            </div>
+            <div class="mt-4 sm:mt-0 flex space-x-3">
+                <button id="scheduleReportBtn" class="btn-secondary">
+                    <i data-lucide="calendar" class="w-4 h-4 mr-2"></i>
+                    Schedule Report
+                </button>
+                <button id="generateReportBtn" class="btn-primary">
+                    <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                    Generate Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Generation Section -->
+    <div class="grid grid-cols-1 xl:grid-cols-4 gap-8 mb-8">
+        <!-- Report Builder -->
+        <div class="xl:col-span-3">
+            <div class="card">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900">Report Builder</h2>
+                    <div class="flex space-x-2">
+                        <button id="resetBuilderBtn" class="btn-ghost">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                            Reset
+                        </button>
+                        <button id="saveTemplateBtn" class="btn-ghost">
+                            <i data-lucide="save" class="w-4 h-4 mr-2"></i>
+                            Save Template
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Report Configuration -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Report Type -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Report Type</label>
+                        <select id="reportType" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="performance">Performance Summary</option>
+                            <option value="detailed">Detailed Analysis</option>
+                            <option value="progress">Progress Tracking</option>
+                            <option value="comparison">Class Comparison</option>
+                            <option value="individual">Individual Student</option>
+                            <option value="subject">Subject Analysis</option>
+                        </select>
+                    </div>
+
+                    <!-- Time Period -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Time Period</label>
+                        <select id="timePeriod" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="current">Current Term</option>
+                            <option value="last30">Last 30 Days</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="semester">This Semester</option>
+                            <option value="year">Academic Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+
+                    <!-- Format -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Format</label>
+                        <select id="reportFormat" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="pdf">PDF Document</option>
+                            <option value="excel">Excel Spreadsheet</option>
+                            <option value="csv">CSV Data</option>
+                            <option value="word">Word Document</option>
+                            <option value="powerpoint">PowerPoint Presentation</option>
+                        </select>
+                    </div>
+
+                    <!-- Recipients -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Recipients</label>
+                        <select id="reportRecipients" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500" multiple>
+                            <option value="teachers">Teachers</option>
+                            <option value="parents">Parents</option>
+                            <option value="administration">Administration</option>
+                            <option value="students">Students</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Custom Date Range (hidden by default) -->
+                <div id="customDateRange" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">From Date</label>
+                        <input type="date" id="fromDate" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">To Date</label>
+                        <input type="date" id="toDate" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Report Sections -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Include Sections</label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="report-section" value="summary" checked>
+                            <span class="text-sm">Executive Summary</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="report-section" value="performance" checked>
+                            <span class="text-sm">Performance Metrics</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="report-section" value="trends">
+                            <span class="text-sm">Trend Analysis</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="report-section" value="recommendations" checked>
+                            <span class="text-sm">Recommendations</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="report-section" value="charts">
+                            <span class="text-sm">Charts & Graphs</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="report-section" value="individual">
+                            <span class="text-sm">Individual Profiles</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <button id="generateCustomReportBtn" class="w-full btn-primary">
+                    <i data-lucide="file-plus" class="w-5 h-5 mr-2"></i>
+                    Generate Custom Report
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Reports -->
+        <div class="space-y-6">
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Reports</h3>
+                <div class="space-y-3">
+                    <button class="quick-report-btn" data-type="weekly">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i data-lucide="calendar-days" class="w-5 h-5 text-blue-600"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-medium text-gray-900">Weekly Summary</p>
+                                <p class="text-xs text-gray-500">Last 7 days overview</p>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="quick-report-btn" data-type="monthly">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i data-lucide="calendar" class="w-5 h-5 text-green-600"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-medium text-gray-900">Monthly Report</p>
+                                <p class="text-xs text-gray-500">Complete month analysis</p>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="quick-report-btn" data-type="performance">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-5 h-5 text-purple-600"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-medium text-gray-900">Performance Alert</p>
+                                <p class="text-xs text-gray-500">Students needing attention</p>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="quick-report-btn" data-type="grades">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                <i data-lucide="award" class="w-5 h-5 text-orange-600"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="font-medium text-gray-900">Grade Distribution</p>
+                                <p class="text-xs text-gray-500">Current grade breakdown</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Report Templates -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Saved Templates</h3>
+                <div id="reportTemplates" class="space-y-3">
+                    <div class="text-center text-gray-500 py-4">
+                        <i data-lucide="folder-open" class="w-6 h-6 mx-auto mb-2 opacity-50"></i>
+                        <p class="text-sm">No saved templates</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+        </div>
+    </div>
+
+    <!-- Analysis Reports -->
+    <div class="card">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Analysis Reports</h2>
+            <div class="flex space-x-2">
+                <select id="reportFilter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <option value="all">All Reports</option>
+                    <option value="recent">Recent Analysis</option>
+                    <option value="completed">Completed</option>
+                    <option value="favorites">Favorites</option>
+                </select>
+                <button id="refreshReportsBtn" class="btn-secondary">
+                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Analysis Reports Grid -->
+        <div id="analysisReportsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyReportsState" class="text-center py-12">
+            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="file-text" class="w-12 h-12 text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No Analysis Reports Yet</h3>
+            <p class="text-gray-600 mb-6">Upload and analyze student data to generate downloadable reports</p>
+            <a href="dashboard.html" class="btn-primary">
+                <i data-lucide="upload" class="w-4 h-4 mr-2"></i>
+                Go to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Report Generation Modal -->
+<div id="reportModal" class="hidden modal-overlay">
+    <div class="modal-content animate-slide-in-up">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-900">Generating Report</h3>
+                    <p class="text-gray-600 text-sm mt-1">Please wait while we prepare your report</p>
+                </div>
+                <button id="closeReportModal" class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Progress -->
+            <div class="mb-6">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span id="progressText">Initializing...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div id="reportStatus" class="text-center py-8">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-600">Processing your request...</p>
+            </div>
+
+            <!-- Actions -->
+            <div id="reportActions" class="hidden flex space-x-3">
+                <button id="downloadReportBtn" class="flex-1 btn-primary">
+                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                    Download Report
+                </button>
+                <button id="shareReportBtn" class="btn-secondary">
+                    <i data-lucide="share-2" class="w-4 h-4 mr-2"></i>
+                    Share
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast hidden">
+    <div class="flex items-center space-x-3">
+        <div id="toastIcon" class="w-5 h-5 flex-shrink-0"></div>
+        <div class="flex-1 min-w-0">
+            <p id="toastMessage" class="text-sm font-medium truncate"></p>
+        </div>
+        <button id="closeToast" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script>
+    // Reports Controller
+    class ReportsController {
+        constructor() {
+            this.reports = [];
+            this.templates = [];
+            this.currentPage = 1;
+            this.reportsPerPage = 10;
+            this.init();
+        }
+
+        init() {
+            // Check authentication
+            if (!api.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            this.setupUI();
+            this.setupEventListeners();
+            this.loadReports();
+            this.loadTemplates();
+            this.checkForNewAnalysis();
+            lucide.createIcons();
+        }
+
+        setupUI() {
+            const user = api.getCurrentUser();
+            if (user) {
+                document.getElementById('userName').textContent = user.name || user.email.split('@')[0];
+                document.getElementById('userAvatar').textContent = (user.name || user.email).charAt(0).toUpperCase();
+            }
+
+            // Set default dates
+            const today = new Date();
+            const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+            
+            document.getElementById('fromDate').valueAsDate = lastMonth;
+            document.getElementById('toDate').valueAsDate = today;
+        }
+
+        setupEventListeners() {
+            // User menu
+            document.getElementById('userMenuBtn').addEventListener('click', this.toggleUserMenu.bind(this));
+            document.getElementById('logoutBtn').addEventListener('click', this.logout.bind(this));
+
+            // Report generation
+            document.getElementById('generateReportBtn').addEventListener('click', this.showReportBuilder.bind(this));
+            document.getElementById('generateCustomReportBtn').addEventListener('click', this.generateCustomReport.bind(this));
+            
+            // Quick reports
+            document.querySelectorAll('.quick-report-btn').forEach(btn => {
+                btn.addEventListener('click', this.generateQuickReport.bind(this));
+            });
+
+            // Report builder
+            document.getElementById('resetBuilderBtn').addEventListener('click', this.resetBuilder.bind(this));
+            document.getElementById('saveTemplateBtn').addEventListener('click', this.saveTemplate.bind(this));
+            document.getElementById('timePeriod').addEventListener('change', this.onTimePeriodChange.bind(this));
+
+            // Modals
+            document.getElementById('closeReportModal').addEventListener('click', this.hideReportModal.bind(this));
+
+            // Actions
+            document.getElementById('downloadReportBtn').addEventListener('click', this.downloadReport.bind(this));
+            document.getElementById('shareReportBtn').addEventListener('click', this.shareReport.bind(this));
+            document.getElementById('clearHistoryBtn').addEventListener('click', this.clearHistory.bind(this));
+
+            // Pagination
+            document.getElementById('prevPageBtn').addEventListener('click', this.previousPage.bind(this));
+            document.getElementById('nextPageBtn').addEventListener('click', this.nextPage.bind(this));
+
+            // Filters
+            document.getElementById('reportFilter').addEventListener('change', this.onFilterChange.bind(this));
+
+            // Toast
+            document.getElementById('closeToast').addEventListener('click', this.hideToast.bind(this));
+
+            // Outside clicks
+            document.addEventListener('click', this.handleOutsideClick.bind(this));
+        }
+
+        loadReports() {
+            // Load analysis reports from localStorage (from dashboard analysis results)
+            this.loadAnalysisReports();
+            this.renderAnalysisReports();
+        }
+
+        loadAnalysisReports() {
+            // Load completed analysis sessions from localStorage
+            const analysisHistory = JSON.parse(localStorage.getItem('analysis_history') || '[]');
+            this.reports = analysisHistory.map((analysis, index) => ({
+                id: analysis.sessionId || `analysis_${index}`,
+                sessionId: analysis.sessionId,
+                fileName: analysis.fileName,
+                name: `Analysis Report - ${analysis.fileName}`,
+                totalStudents: analysis.totalStudents,
+                totalSubjects: analysis.totalSubjects,
+                analysisResults: analysis.analysisResults,
+                overallAssessment: analysis.overallAssessment,
+                individualInsights: analysis.individualInsights,
+                recommendations: analysis.recommendations,
+                insights: analysis.insights,
+                created: analysis.timestamp || new Date().toISOString(),
+                downloadUrl: analysis.downloadUrl,
+                status: 'Completed',
+                type: 'Student Performance Analysis'
+            }));
+        }
+
+        loadTemplates() {
+            const savedTemplates = localStorage.getItem('edu_aid_templates');
+            if (savedTemplates) {
+                this.templates = JSON.parse(savedTemplates);
+                this.renderTemplates();
+            }
+        }
+
+        saveReports() {
+            localStorage.setItem('edu_aid_reports', JSON.stringify(this.reports));
+        }
+
+        saveTemplates() {
+            localStorage.setItem('edu_aid_templates', JSON.stringify(this.templates));
+        }
+
+        checkForNewAnalysis() {
+            // Check if there are new analysis results from dashboard
+            const recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+            const analysisHistory = JSON.parse(localStorage.getItem('analysis_history') || '[]');
+            
+            // Sync with recent activities from dashboard
+            recentActivities.forEach(activity => {
+                if (activity.type === 'File Analyzed' && !analysisHistory.some(h => h.fileName === activity.description)) {
+                    // This is a placeholder - in real implementation, you'd fetch the actual analysis data
+                    console.log('New analysis detected:', activity.description);
+                }
+            });
+        }
+
+        renderAnalysisReports() {
+            const grid = document.getElementById('analysisReportsGrid');
+            const emptyState = document.getElementById('emptyReportsState');
+
+            if (this.reports.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = this.reports.map(report => this.createReportCard(report)).join('');
+            lucide.createIcons();
+        }
+
+        createReportCard(report) {
+            const createdDate = new Date(report.created).toLocaleDateString();
+            const createdTime = new Date(report.created).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            return `
+                <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow duration-200">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+                                <i data-lucide="file-text" class="w-6 h-6 text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-900 mb-1">${report.fileName || 'Analysis Report'}</h3>
+                                <p class="text-sm text-gray-500">${createdDate} at ${createdTime}</p>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="reports.favoriteReport('${report.id}')" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Add to favorites">
+                                <i data-lucide="heart" class="w-4 h-4 text-gray-400"></i>
+                            </button>
+                            <button onclick="reports.deleteAnalysisReport('${report.id}')" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Delete report">
+                                <i data-lucide="trash-2" class="w-4 h-4 text-red-400"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Report Summary -->
+                    <div class="mb-4">
+                        <div class="grid grid-cols-2 gap-4 mb-3">
+                            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">${report.totalStudents || 0}</div>
+                                <div class="text-xs text-blue-800">Students</div>
+                            </div>
+                            <div class="text-center p-3 bg-green-50 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600">${report.totalSubjects || 0}</div>
+                                <div class="text-xs text-green-800">Subjects</div>
+                            </div>
+                        </div>
+
+                        ${report.overallAssessment ? `
+                            <div class="p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Class Grade</span>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded">${report.overallAssessment.classGrade || 'N/A'}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-700">Average Score</span>
+                                    <span class="text-sm font-medium text-gray-900">${report.overallAssessment.averageScore || 'N/A'}%</span>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- Key Insights Preview -->
+                    ${report.insights && report.insights.length > 0 ? `
+                        <div class="mb-4">
+                            <h4 class="text-sm font-medium text-gray-700 mb-2">Key Insights</h4>
+                            <div class="space-y-1">
+                                ${report.insights.slice(0, 2).map(insight => `
+                                    <div class="flex items-start space-x-2">
+                                        <i data-lucide="lightbulb" class="w-3 h-3 text-yellow-500 mt-1 flex-shrink-0"></i>
+                                        <p class="text-xs text-gray-600 line-clamp-2">${insight}</p>
+                                    </div>
+                                `).join('')}
+                                ${report.insights.length > 2 ? `
+                                    <p class="text-xs text-blue-600 cursor-pointer hover:text-blue-700">+${report.insights.length - 2} more insights</p>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Actions -->
+                    <div class="flex space-x-2">
+                        <button onclick="reports.viewReport('${report.id}')" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+                            <i data-lucide="eye" class="w-4 h-4 mr-2 inline"></i>
+                            View Details
+                        </button>
+                        <button onclick="reports.downloadAnalysisReport('${report.id}')" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="reports.shareAnalysisReport('${report.id}')" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                            <i data-lucide="share-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        viewReport(reportId) {
+            const report = this.reports.find(r => r.id === reportId);
+            if (!report) return;
+
+            // Store report data and navigate to a detailed view
+            localStorage.setItem('current_report_view', JSON.stringify(report));
+            
+            // For now, show detailed view in modal or redirect to dashboard with the analysis
+            this.showReportDetailsModal(report);
+        }
+
+        showReportDetailsModal(report) {
+            // Create and show a detailed modal with the analysis results
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xl font-semibold text-gray-900">${report.fileName} - Analysis Report</h3>
+                            <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">
+                                <i data-lucide="x" class="w-6 h-6"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <!-- Overall Assessment -->
+                        ${report.overallAssessment ? `
+                            <div class="mb-6">
+                                <h4 class="text-lg font-semibold text-gray-900 mb-3">Overall Assessment</h4>
+                                <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                                    <div class="grid grid-cols-3 gap-4 mb-3">
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-blue-600">${report.overallAssessment.classGrade || 'N/A'}</div>
+                                            <div class="text-sm text-blue-800">Class Grade</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-blue-600">${report.overallAssessment.averageScore || 'N/A'}</div>
+                                            <div class="text-sm text-blue-800">Average Score</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-2xl font-bold text-blue-600">${report.totalStudents}</div>
+                                            <div class="text-sm text-blue-800">Students</div>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-800">${report.overallAssessment.summary || 'Analysis completed successfully.'}</p>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Key Insights -->
+                        ${report.insights && report.insights.length > 0 ? `
+                            <div class="mb-6">
+                                <h4 class="text-lg font-semibold text-gray-900 mb-3">Key Insights</h4>
+                                <div class="space-y-2">
+                                    ${report.insights.map((insight, index) => `
+                                        <div class="flex items-start space-x-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                            <div class="w-6 h-6 bg-yellow-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                                                ${index + 1}
+                                            </div>
+                                            <p class="text-gray-800">${insight}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Recommendations -->
+                        ${report.recommendations ? `
+                            <div class="mb-6">
+                                <h4 class="text-lg font-semibold text-gray-900 mb-3">Recommendations</h4>
+                                <div class="space-y-4">
+                                    ${report.recommendations.immediate && report.recommendations.immediate.length > 0 ? `
+                                        <div class="bg-red-50 border border-red-200 rounded-xl p-4">
+                                            <h5 class="font-semibold text-red-900 mb-2">Immediate Actions</h5>
+                                            <ul class="space-y-1">
+                                                ${report.recommendations.immediate.map(action => `
+                                                    <li class="flex items-start space-x-2 text-red-800">
+                                                        <i data-lucide="alert-circle" class="w-4 h-4 mt-0.5 text-red-600"></i>
+                                                        <span>${action}</span>
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${report.recommendations.shortTerm && report.recommendations.shortTerm.length > 0 ? `
+                                        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                                            <h5 class="font-semibold text-yellow-900 mb-2">Short Term Goals</h5>
+                                            <ul class="space-y-1">
+                                                ${report.recommendations.shortTerm.map(action => `
+                                                    <li class="flex items-start space-x-2 text-yellow-800">
+                                                        <i data-lucide="clock" class="w-4 h-4 mt-0.5 text-yellow-600"></i>
+                                                        <span>${action}</span>
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+
+                                    ${report.recommendations.longTerm && report.recommendations.longTerm.length > 0 ? `
+                                        <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+                                            <h5 class="font-semibold text-green-900 mb-2">Long Term Strategy</h5>
+                                            <ul class="space-y-1">
+                                                ${report.recommendations.longTerm.map(action => `
+                                                    <li class="flex items-start space-x-2 text-green-800">
+                                                        <i data-lucide="target" class="w-4 h-4 mt-0.5 text-green-600"></i>
+                                                        <span>${action}</span>
+                                                    </li>
+                                                `).join('')}
+                                            </ul>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Individual Insights -->
+                        ${report.individualInsights && report.individualInsights.length > 0 ? `
+                            <div class="mb-6">
+                                <h4 class="text-lg font-semibold text-gray-900 mb-3">Individual Student Insights</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    ${report.individualInsights.slice(0, 6).map(student => `
+                                        <div class="bg-white border border-gray-200 rounded-xl p-4">
+                                            <div class="flex items-center justify-between mb-3">
+                                                <h5 class="font-semibold text-gray-900">${student.studentName || 'Student'}</h5>
+                                                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                                    ${student.averageScore || 'N/A'}
+                                                </span>
+                                            </div>
+                                            <div class="space-y-2 text-sm">
+                                                ${student.strengths && student.strengths.length > 0 ? `
+                                                    <div>
+                                                        <span class="text-green-600 font-medium">Strengths:</span>
+                                                        <span class="text-gray-700">${student.strengths.join(', ')}</span>
+                                                    </div>
+                                                ` : ''}
+                                                ${student.concerns && student.concerns.length > 0 ? `
+                                                    <div>
+                                                        <span class="text-red-600 font-medium">Concerns:</span>
+                                                        <span class="text-gray-700">${student.concerns.join(', ')}</span>
+                                                    </div>
+                                                ` : ''}
+                                                ${student.recommendations && student.recommendations.length > 0 ? `
+                                                    <div>
+                                                        <span class="text-blue-600 font-medium">Actions:</span>
+                                                        <span class="text-gray-700">${student.recommendations.join(', ')}</span>
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                ${report.individualInsights.length > 6 ? `
+                                    <p class="text-center text-blue-600 mt-4">And ${report.individualInsights.length - 6} more students...</p>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            lucide.createIcons();
+        }
+
+        downloadAnalysisReport(reportId) {
+            const report = this.reports.find(r => r.id === reportId);
+            if (!report || !report.downloadUrl) {
+                this.showToast('Download URL not available', 'error');
+                return;
+            }
+
+            // If it's a real download URL from the backend
+            if (report.downloadUrl.startsWith('/api/')) {
+                window.open(`http://localhost:5000${report.downloadUrl}`, '_blank');
+                this.showToast('Downloading PDF report...', 'success');
+            } else {
+                // Generate and download a simple report
+                this.generatePDFReport(report);
+            }
+        }
+
+        generatePDFReport(report) {
+            // Simulate PDF generation and download
+            const content = `
+                EDU-AID Analysis Report
+                File: ${report.fileName}
+                Generated: ${new Date().toLocaleString()}
+                
+                Students Analyzed: ${report.totalStudents}
+                Subjects Covered: ${report.totalSubjects}
+                Class Grade: ${report.overallAssessment?.classGrade || 'N/A'}
+                Average Score: ${report.overallAssessment?.averageScore || 'N/A'}%
+                
+                Summary: ${report.overallAssessment?.summary || 'Analysis completed successfully.'}
+            `;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${report.fileName}_analysis_report.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+
+            this.showToast('Report downloaded successfully', 'success');
+        }
+
+        shareAnalysisReport(reportId) {
+            const report = this.reports.find(r => r.id === reportId);
+            if (!report) return;
+
+            const shareData = {
+                title: `EDU-AID Analysis Report - ${report.fileName}`,
+                text: `Analysis report for ${report.totalStudents} students across ${report.totalSubjects} subjects`,
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData);
+            } else {
+                navigator.clipboard.writeText(`${shareData.title}\n${shareData.text}\n${shareData.url}`);
+                this.showToast('Report details copied to clipboard', 'success');
+            }
+        }
+
+        deleteAnalysisReport(reportId) {
+            if (!confirm('Are you sure you want to delete this analysis report?')) return;
+
+            this.reports = this.reports.filter(r => r.id !== reportId);
+            
+            // Update localStorage
+            const analysisHistory = JSON.parse(localStorage.getItem('analysis_history') || '[]');
+            const updatedHistory = analysisHistory.filter(h => h.sessionId !== reportId);
+            localStorage.setItem('analysis_history', JSON.stringify(updatedHistory));
+
+            this.renderAnalysisReports();
+            this.showToast('Analysis report deleted', 'success');
+        }
+
+        favoriteReport(reportId) {
+            const report = this.reports.find(r => r.id === reportId);
+            if (!report) return;
+
+            // Toggle favorite status
+            report.isFavorite = !report.isFavorite;
+            
+            // Update localStorage
+            const analysisHistory = JSON.parse(localStorage.getItem('analysis_history') || '[]');
+            const historyItem = analysisHistory.find(h => h.sessionId === reportId);
+            if (historyItem) {
+                historyItem.isFavorite = report.isFavorite;
+                localStorage.setItem('analysis_history', JSON.stringify(analysisHistory));
+            }
+
+            this.renderAnalysisReports();
+            this.showToast(report.isFavorite ? 'Added to favorites' : 'Removed from favorites', 'success');
+        }
+
+        renderReports() {
+            const tbody = document.getElementById('reportsTableBody');
+            const startIndex = (this.currentPage - 1) * this.reportsPerPage;
+            const endIndex = startIndex + this.reportsPerPage;
+            const pageReports = this.reports.slice(startIndex, endIndex);
+
+            tbody.innerHTML = pageReports.map(report => `
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                    <td class="py-3 px-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i data-lucide="file-text" class="w-5 h-5 text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">${report.name}</p>
+                                <p class="text-sm text-gray-500">${report.size}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-sm text-gray-600">${report.type}</td>
+                    <td class="py-3 px-4">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${this.getFormatColor(report.format)}">
+                            ${report.format}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-sm text-gray-600">${new Date(report.created).toLocaleDateString()}</td>
+                    <td class="py-3 px-4">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${this.getStatusColor(report.status)}">
+                            ${report.status}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                            <button class="p-1 hover:bg-gray-100 rounded" onclick="reports.downloadReport(${report.id})" title="Download">
+                                <i data-lucide="download" class="w-4 h-4 text-gray-600"></i>
+                            </button>
+                            <button class="p-1 hover:bg-gray-100 rounded" onclick="reports.shareReport(${report.id})" title="Share">
+                                <i data-lucide="share-2" class="w-4 h-4 text-gray-600"></i>
+                            </button>
+                            <button class="p-1 hover:bg-gray-100 rounded" onclick="reports.deleteReport(${report.id})" title="Delete">
+                                <i data-lucide="trash-2" class="w-4 h-4 text-red-600"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Update pagination
+            this.updatePagination();
+            lucide.createIcons();
+        }
+
+        renderTemplates() {
+            const container = document.getElementById('reportTemplates');
+            
+            if (this.templates.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-500 py-4">
+                        <i data-lucide="folder-open" class="w-6 h-6 mx-auto mb-2 opacity-50"></i>
+                        <p class="text-sm">No saved templates</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = this.templates.map(template => `
+                    <button class="w-full text-left p-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors" onclick="reports.loadTemplate('${template.id}')">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-medium text-gray-900">${template.name}</p>
+                                <p class="text-xs text-gray-500">${template.type}</p>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+                        </div>
+                    </button>
+                `).join('');
+            }
+            
+            lucide.createIcons();
+        }
+
+        getFormatColor(format) {
+            const colors = {
+                'PDF': 'bg-red-100 text-red-800',
+                'Excel': 'bg-green-100 text-green-800',
+                'Word': 'bg-blue-100 text-blue-800',
+                'CSV': 'bg-yellow-100 text-yellow-800',
+                'PowerPoint': 'bg-orange-100 text-orange-800'
+            };
+            return colors[format] || 'bg-gray-100 text-gray-800';
+        }
+
+        getStatusColor(status) {
+            const colors = {
+                'Completed': 'bg-green-100 text-green-800',
+                'Generating': 'bg-blue-100 text-blue-800',
+                'Failed': 'bg-red-100 text-red-800',
+                'Scheduled': 'bg-yellow-100 text-yellow-800'
+            };
+            return colors[status] || 'bg-gray-100 text-gray-800';
+        }
+
+        updatePagination() {
+            const totalReports = this.reports.length;
+            const startIndex = (this.currentPage - 1) * this.reportsPerPage + 1;
+            const endIndex = Math.min(this.currentPage * this.reportsPerPage, totalReports);
+
+            document.getElementById('showingStart').textContent = startIndex;
+            document.getElementById('showingEnd').textContent = endIndex;
+            document.getElementById('totalReports').textContent = totalReports;
+
+            document.getElementById('prevPageBtn').disabled = this.currentPage === 1;
+            document.getElementById('nextPageBtn').disabled = endIndex >= totalReports;
+        }
+
+        showReportBuilder() {
+            // Scroll to report builder
+            document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async generateCustomReport() {
+            const reportType = document.getElementById('reportType').value;
+            const timePeriod = document.getElementById('timePeriod').value;
+            const format = document.getElementById('reportFormat').value;
+            
+            const sections = Array.from(document.querySelectorAll('.report-section:checked')).map(cb => cb.value);
+
+            if (sections.length === 0) {
+                this.showToast('Please select at least one section to include', 'warning');
+                return;
+            }
+
+            this.showReportModal();
+            await this.simulateReportGeneration();
+        }
+
+        async generateQuickReport(e) {
+            const reportType = e.currentTarget.dataset.type;
+            this.showReportModal();
+            await this.simulateReportGeneration(reportType);
+        }
+
+        async simulateReportGeneration(type = 'custom') {
+            const steps = [
+                'Collecting data...',
+                'Processing student records...',
+                'Analyzing performance metrics...',
+                'Generating charts and graphs...',
+                'Compiling report sections...',
+                'Finalizing document...'
+            ];
+
+            for (let i = 0; i < steps.length; i++) {
+                document.getElementById('progressText').textContent = steps[i];
+                const progress = ((i + 1) / steps.length) * 100;
+                document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+                document.getElementById('progressBar').style.width = progress + '%';
+                
+                await new Promise(resolve => setTimeout(resolve, 800));
+            }
+
+            // Report completed
+            document.getElementById('reportStatus').innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="check" class="w-8 h-8 text-green-600"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-2">Report Generated Successfully!</h4>
+                    <p class="text-gray-600">Your report is ready for download or sharing.</p>
+                </div>
+            `;
+
+            document.getElementById('reportActions').classList.remove('hidden');
+
+            // Add to reports list
+            const newReport = {
+                id: this.reports.length + 1,
+                name: `${type.charAt(0).toUpperCase() + type.slice(1)} Report - ${new Date().toLocaleDateString()}`,
+                type: type === 'custom' ? 'Custom Report' : type.charAt(0).toUpperCase() + type.slice(1) + ' Report',
+                format: document.getElementById('reportFormat')?.value || 'PDF',
+                created: new Date().toISOString(),
+                status: 'Completed',
+                size: `${Math.floor(Math.random() * 3) + 1}.${Math.floor(Math.random() * 9)}MB`,
+                downloadUrl: '#'
+            };
+
+            this.reports.unshift(newReport);
+            this.saveReports();
+            this.renderReports();
+
+            lucide.createIcons();
+        }
+
+        onTimePeriodChange(e) {
+            const customRange = document.getElementById('customDateRange');
+            if (e.target.value === 'custom') {
+                customRange.classList.remove('hidden');
+            } else {
+                customRange.classList.add('hidden');
+            }
+        }
+
+        resetBuilder() {
+            document.getElementById('reportType').value = 'performance';
+            document.getElementById('timePeriod').value = 'current';
+            document.getElementById('reportFormat').value = 'pdf';
+            document.getElementById('reportRecipients').selectedIndex = -1;
+            document.querySelectorAll('.report-section').forEach(cb => {
+                cb.checked = cb.value === 'summary' || cb.value === 'performance' || cb.value === 'recommendations';
+            });
+            document.getElementById('customDateRange').classList.add('hidden');
+        }
+
+        saveTemplate() {
+            const name = prompt('Enter template name:');
+            if (!name) return;
+
+            const template = {
+                id: Date.now().toString(),
+                name,
+                type: document.getElementById('reportType').value,
+                timePeriod: document.getElementById('timePeriod').value,
+                format: document.getElementById('reportFormat').value,
+                sections: Array.from(document.querySelectorAll('.report-section:checked')).map(cb => cb.value),
+                created: new Date().toISOString()
+            };
+
+            this.templates.push(template);
+            this.saveTemplates();
+            this.renderTemplates();
+            this.showToast('Template saved successfully', 'success');
+        }
+
+        loadTemplate(templateId) {
+            const template = this.templates.find(t => t.id === templateId);
+            if (!template) return;
+
+            document.getElementById('reportType').value = template.type;
+            document.getElementById('timePeriod').value = template.timePeriod;
+            document.getElementById('reportFormat').value = template.format;
+            
+            document.querySelectorAll('.report-section').forEach(cb => {
+                cb.checked = template.sections.includes(cb.value);
+            });
+
+            this.showToast('Template loaded', 'success');
+        }
+
+        downloadReport(reportId) {
+            const report = this.reports.find(r => r.id === reportId);
+            if (!report) return;
+
+            // Simulate download
+            const link = document.createElement('a');
+            link.href = '#';
+            link.download = report.name + '.' + report.format.toLowerCase();
+            link.click();
+
+            this.showToast(`${report.name} download started`, 'success');
+        }
+
+        shareReport(reportId) {
+            const report = this.reports.find(r => r.id === reportId);
+            if (!report) return;
+
+            // Simulate sharing
+            const shareData = {
+                title: report.name,
+                text: `Check out this ${report.type} report`,
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData);
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                this.showToast('Report link copied to clipboard', 'success');
+            }
+        }
+
+        deleteReport(reportId) {
+            if (!confirm('Are you sure you want to delete this report?')) return;
+
+            this.reports = this.reports.filter(r => r.id !== reportId);
+            this.saveReports();
+            this.renderReports();
+            this.showToast('Report deleted successfully', 'success');
+        }
+
+        clearHistory() {
+            if (!confirm('Are you sure you want to clear all report history?')) return;
+
+            this.reports = [];
+            this.saveReports();
+            this.renderReports();
+            this.showToast('Report history cleared', 'success');
+        }
+
+        onFilterChange(e) {
+            // Filter reports based on selection
+            // This is a placeholder for filtering functionality
+            this.renderReports();
+        }
+
+        previousPage() {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.renderReports();
+            }
+        }
+
+        nextPage() {
+            const totalPages = Math.ceil(this.reports.length / this.reportsPerPage);
+            if (this.currentPage < totalPages) {
+                this.currentPage++;
+                this.renderReports();
+            }
+        }
+
+        showReportModal() {
+            document.getElementById('reportModal').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').textContent = 'Initializing...';
+            document.getElementById('progressPercent').textContent = '0%';
+            document.getElementById('reportActions').classList.add('hidden');
+            
+            document.getElementById('reportStatus').innerHTML = `
+                <div class="text-center py-8">
+                    <div class="loading-spinner mx-auto mb-4"></div>
+                    <p class="text-gray-600">Processing your request...</p>
+                </div>
+            `;
+        }
+
+        hideReportModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+        }
+
+        // UI Helper Methods
+        toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('hidden');
+        }
+
+        logout() {
+            api.logout();
+            window.location.href = 'login.html';
+        }
+
+        handleOutsideClick(e) {
+            const userDropdown = document.getElementById('userDropdown');
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const reportModal = document.getElementById('reportModal');
+
+            if (!userMenuBtn.contains(e.target)) {
+                userDropdown.classList.add('hidden');
+            }
+
+            if (e.target === reportModal) {
+                this.hideReportModal();
+            }
+        }
+
+        showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            const config = {
+                success: { icon: 'check-circle', color: 'text-green-600' },
+                error: { icon: 'x-circle', color: 'text-red-600' },
+                warning: { icon: 'alert-triangle', color: 'text-yellow-600' },
+                info: { icon: 'info', color: 'text-blue-600' }
+            };
+
+            const { icon, color } = config[type] || config.info;
+
+            toastMessage.textContent = message;
+            toastIcon.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5 ${color}"></i>`;
+
+            toast.classList.remove('hidden', 'toast-enter');
+            toast.classList.add('toast-enter-active');
+
+            setTimeout(() => this.hideToast(), 5000);
+            lucide.createIcons();
+        }
+
+        hideToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('toast-enter');
+            toast.classList.remove('toast-enter-active');
+            setTimeout(() => toast.classList.add('hidden'), 300);
+        }
+    }
+
+    // Initialize reports
+    document.addEventListener('DOMContentLoaded', () => {
+        window.reports = new ReportsController();
+    });
+</script>
+
+<style>
+    .quick-report-btn {
+        width: 100%;
+        text-align: left;
+        padding: 0.75rem;
+        border-radius: 0.75rem;
+        border: 1px solid #d1d5db;
+        background-color: transparent;
+        transition: all 0.2s ease;
+    }
+    
+    .quick-report-btn:hover {
+        background-color: rgba(249, 250, 251, 0.8);
+        border-color: #9ca3af;
+    }
+    
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
+</body>
+</html>

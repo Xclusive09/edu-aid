@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDU_AID – AI-Powered Educational Analytics</title>
+
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- Tailwind (via CDN – replace with your build later) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+              secondary: { 500: '#7c3aed', 600: '#6d28d9' },
+            },
+            fontFamily: { sans: ['Inter', 'sans-serif'] },
+          },
+        },
+      }
+    </script>
+
+    <style>
+      .bg-pattern { background: radial-gradient(circle at 25% 25%, rgba(59,130,246,.08) 0%, transparent 50%),
+                     radial-gradient(circle at 75% 75%, rgba(147,51,234,.08) 0%, transparent 50%); }
+      .animate-fade-in { animation: fadeIn .6s ease-out forwards; }
+      @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+      .hover-lift:hover { transform: translateY(-4px); }
+    </style>
+</head>
+
+<body class="font-sans bg-gray-50 text-gray-800">
+
+  <!-- ==================== NAVBAR ==================== -->
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-xl flex items-center justify-center">
+          <span class="text-white font-bold text-lg">E</span>
+        </div>
+        <div>
+          <span class="text-xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">EDU_AID</span>
+          <p class="text-xs text-gray-500 -mt-1">AI Educational Assistant</p>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center space-x-6">
+        <a href="login.html" class="text-gray-600 hover:text-gray-900 font-medium">Sign In</a>
+        <a href="signup.html" class="px-5 py-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg font-medium hover:shadow-lg transition">Get Started</a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <button id="mobileMenuBtn" class="md:hidden p-2">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-200">
+      <div class="px-4 py-3 space-y-2">
+        <a href="login.html" class="block py-2 text-gray-700">Sign In</a>
+        <a href="signup.html" class="block py-2 bg-primary-600 text-white rounded-lg text-center font-medium">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-primary-50 via-indigo-50 to-purple-50 py-20">
+    <div class="absolute inset-0 bg-pattern opacity-40"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Text -->
+        <div class="space-y-8">
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            Powered by Google Gemini AI
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+            Intelligent <span class="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">Educational Analytics</span>
+          </h1>
+
+          <p class="text-lg text-gray-600 max-w-xl">
+            Turn SS1-SS3 student data into actionable insights, personalized course recommendations, and professional reports.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="signup.html" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-lg font-medium hover:shadow-lg transition hover-lift">
+              <i data-lucide="rocket" class="w-5 h-5"></i>
+              Start Free Analysis
+            </a>
+            <a href="#how-it-works" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white border border-gray-300 text-gray-800 rounded-lg font-medium hover:bg-gray-50 transition">
+              <i data-lucide="play" class="w-5 h-5"></i>
+              How It Works
+            </a>
+          </div>
+
+          <!-- Quick features -->
+          <div class="grid grid-cols-2 gap-4 mt-10">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                <i data-lucide="brain" class="w-5 h-5 text-primary-600"></i>
+              </div>
+              <span class="font-medium">AI Analysis</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                <i data-lucide="graduation-cap" class="w-5 h-5 text-green-600"></i>
+              </div>
+              <span class="font-medium">Course Match</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual -->
+        <div class="relative">
+          <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/30">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-semibold flex items-center gap-2">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                Live Dashboard
+              </h3>
+              <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">Online</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-6">
+              <div class="bg-gradient-to-br from-primary-50 to-primary-100 p-4 rounded-lg">
+                <p class="text-2xl font-bold text-primary-700">150</p>
+                <p class="text-xs text-primary-600">Students</p>
+              </div>
+              <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg">
+                <p class="text-2xl font-bold text-green-700">85%</p>
+                <p class="text-xs text-green-600">Success Rate</p>
+              </div>
+            </div>
+
+            <div class="bg-gray-100 h-32 rounded-lg flex items-center justify-center">
+              <i data-lucide="bar-chart-3" class="w-12 h-12 text-primary-500"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== HOW IT WORKS ==================== -->
+  <section id="how-it-works" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4">Simple 3-Step Process</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-12">From raw data to university-ready insights in minutes.</p>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Step 1 -->
+        <div class="animate-fade-in" style="animation-delay:0ms">
+          <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center text-white">
+            <i data-lucide="upload" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">1. Upload Data</h3>
+          <p class="text-gray-600">Excel/CSV with SS1-SS3 scores. Auto-validated.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="animate-fade-in" style="animation-delay:150ms">
+          <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center text-white">
+            <i data-lucide="brain" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">2. AI Analyzes</h3>
+          <p class="text-gray-600">Gemini AI finds patterns, strengths, gaps.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="animate-fade-in" style="animation-delay:300ms">
+          <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-white">
+            <i data-lucide="graduation-cap" class="w-10 h-10"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">3. Get Insights</h3>
+          <p class="text-gray-600">Reports + course recommendations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SS1-SS3 ANALYSIS ==================== -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="inline-flex items-center gap-2 text-sm font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full mb-4">
+          <i data-lucide="graduation-cap" class="w-4 h-4"></i>
+          Nigerian Secondary System
+        </span>
+        <h2 class="text-3xl font-bold mb-4">
+          Full SS1-SS3 <span class="bg-gradient-to-r from-green-600 to-primary-600 bg-clip-text text-transparent">Performance Tracking</span>
+        </h2>
+        <p class="text-lg text-gray-600 mb-6">
+          We understand the Nigerian curriculum and analyze three years of data to reveal true academic trajectories.
+        </p>
+
+        <div class="space-y-6">
+          <div class="flex items-start gap-3">
+            <i data-lucide="trending-up" class="w-5 h-5 text-primary-600 mt-0.5"></i>
+            <div>
+              <h4 class="font-medium">Trend Analysis</h4>
+              <p class="text-sm text-gray-600">See progress from SS1 to SS3.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <i data-lucide="target" class="w-5 h-5 text-secondary-600 mt-0.5"></i>
+            <div>
+              <h4 class="font-medium">Strength Detection</h4>
+              <p class="text-sm text-gray-600">Identify natural aptitudes.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <i data-lucide="lightbulb" class="w-5 h-5 text-green-600 mt-0.5"></i>
+            <div>
+              <h4 class="font-medium">Course Fit</h4>
+              <p class="text-sm text-gray-600">Match to Nigerian university programs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl p-6 shadow-sm border">
+        <div class="space-y-4">
+          <div class="flex items-center gap-3 mb-4">
+            <i data-lucide="file-spreadsheet" class="w-5 h-5 text-green-600"></i>
+            <span class="font-medium">student_results.xlsx</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2 text-xs font-medium">
+            <div class="bg-gray-100 p-2 rounded text-center">Name</div>
+            <div class="bg-gray-100 p-2 rounded text-center">SS1</div>
+            <div class="bg-gray-100 p-2 rounded text-center">SS2</div>
+            <div class="bg-gray-100 p-2 rounded text-center">SS3</div>
+            <div class="p-2 text-center">Adebayo A.</div>
+            <div class="p-2 text-center">78</div>
+            <div class="p-2 text-center">82</div>
+            <div class="p-2 text-center">85</div>
+          </div>
+          <div class="text-center py-4 text-sm text-gray-600">
+            <i data-lucide="brain" class="w-6 h-6 inline text-secondary-600"></i>
+            AI processing…
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FEATURES ==================== -->
+  <section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">Everything You Need</h2>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Powerful, secure, and easy to use.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="p-6 bg-gray-50 rounded-xl border hover:shadow-md transition">
+          <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+            <i data-lucide="file-spreadsheet" class="w-6 h-6 text-primary-600"></i>
+          </div>
+          <h3 class="font-semibold mb-2">Excel Ready</h3>
+          <p class="text-sm text-gray-600">Upload any SS1-SS3 Excel file. Auto-cleaned.</p>
+        </div>
+
+        <div class="p-6 bg-gray-50 rounded-xl border hover:shadow-md transition">
+          <div class="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center mb-4">
+            <i data-lucide="sparkles" class="w-6 h-6 text-secondary-600"></i>
+          </div>
+          <h3 class="font-semibold mb-2">Gemini AI</h3>
+          <p class="text-sm text-gray-600">Deep pattern recognition and natural language insights.</p>
+        </div>
+
+        <div class="p-6 bg-gray-50 rounded-xl border hover:shadow-md transition">
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+            <i data-lucide="shield-check" class="w-6 h-6 text-green-600"></i>
+          </div>
+          <h3 class="font-semibold mb-2">Secure & Private</h3>
+          <p class="text-sm text-gray-600">Encrypted storage. GDPR-compliant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CTA ==================== -->
+  <section class="py-20 bg-gradient-to-r from-primary-600 to-secondary-600">
+    <div class="max-w-4xl mx-auto text-center px-4">
+      <h2 class="text-3xl font-bold text-white mb-4">Start Analyzing Today</h2>
+      <p class="text-lg text-primary-100 mb-8">Free for the first 3 uploads. No card required.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="signup.html" class="px-8 py-3 bg-white text-primary-600 rounded-lg font-medium hover:bg-gray-100 transition">
+          Start Free Trial
+        </a>
+        <a href="login.html" class="px-8 py-3 border-2 border-white text-white rounded-lg font-medium hover:bg-white hover:text-primary-600 transition">
+          Sign In
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-gray-900 text-gray-300 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-4 gap-8">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-9 h-9 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-xl flex items-center justify-center">
+            <span class="text-white font-bold">E</span>
+          </div>
+          <span class="text-xl font-bold text-white">EDU_AID</span>
+        </div>
+        <p class="text-sm mb-4">AI-powered analytics for Nigerian secondary schools.</p>
+        <div class="flex gap-3">
+          <a href="#" class="w-8 h-8 bg-gray-800 rounded flex items-center justify-center hover:bg-gray-700"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+          <a href="#" class="w-8 h-8 bg-gray-800 rounded flex items-center justify-center hover:bg-gray-700"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-medium text-white mb-3">Product</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white">Features</a></li>
+          <li><a href="#" class="hover:text-white">Pricing</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-medium text-white mb-3">Support</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white">Help Center</a></li>
+          <li><a href="#" class="hover:text-white">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-8 pt-8 border-t border-gray-800 text-center text-sm">
+      © 2025 EDU_AID. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script>
+    lucide.createIcons();
+
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        target?.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

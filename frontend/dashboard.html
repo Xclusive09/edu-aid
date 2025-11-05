@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - EDU_AID</title>
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body class="bg-gray-50 min-h-screen bg-pattern">
+<!-- Navigation -->
+<nav class="bg-white/90 backdrop-blur-sm shadow-xl border-b border-white/20 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mr-3 shadow-lg">
+                        <span class="text-white font-bold text-lg">E</span>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">EDU_AID</span>
+                        <p class="text-xs text-gray-500 -mt-1">Educational AI Assistant</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-6">
+                    <button class="nav-link nav-link-active" id="dashboardTab">
+                        <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+                        Dashboard
+                    </button>
+                    <a href="analytics.html" class="nav-link" id="analyticsTab">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 mr-2"></i>
+                        Analytics
+                    </a>
+                    <a href="reports.html" class="nav-link" id="reportsTab">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-2"></i>
+                        Reports
+                    </a>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <button id="notificationBtn" class="relative p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100/80 transition-all duration-200">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center space-x-2 p-2 rounded-xl hover:bg-gray-100/80 transition-all duration-200">
+                            <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+                                <span class="text-white text-sm font-semibold" id="userAvatar">U</span>
+                            </div>
+                            <span class="hidden md:block text-gray-700 font-medium" id="userName">User</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl border border-white/20 z-50 py-2">
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors">
+                                <i data-lucide="user" class="w-4 h-4 mr-2"></i>
+                                Profile Settings
+                            </a>
+                            <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50/80 transition-colors">
+                                <i data-lucide="settings" class="w-4 h-4 mr-2"></i>
+                                Preferences
+                            </a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <button id="logoutBtn" class="flex items-center w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50/80 transition-colors">
+                                <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">Welcome back!</h1>
+                <p class="text-gray-600">Analyze student performance with AI-powered insights</p>
+            </div>
+            <div class="mt-4 sm:mt-0">
+                <div class="flex items-center space-x-2 text-sm text-gray-500">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="stats-card group">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Total Analyses</p>
+                    <p class="stats-value" id="totalAnalyses">0</p>
+                    <div class="flex items-center mt-2">
+                        <i data-lucide="trending-up" class="w-3 h-3 text-green-500 mr-1"></i>
+                        <span class="text-xs text-green-600 font-medium">+12% this month</span>
+                    </div>
+                </div>
+                <div class="w-14 h-14 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i data-lucide="bar-chart-3" class="w-7 h-7 text-blue-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-card group">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Students Analyzed</p>
+                    <p class="stats-value" id="studentsAnalyzed">0</p>
+                    <div class="flex items-center mt-2">
+                        <i data-lucide="trending-up" class="w-3 h-3 text-green-500 mr-1"></i>
+                        <span class="text-xs text-green-600 font-medium">+8% this week</span>
+                    </div>
+                </div>
+                <div class="w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i data-lucide="users" class="w-7 h-7 text-green-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-card group">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">AI Insights</p>
+                    <p class="stats-value" id="aiInsights">0</p>
+                    <div class="flex items-center mt-2">
+                        <i data-lucide="trending-up" class="w-3 h-3 text-green-500 mr-1"></i>
+                        <span class="text-xs text-green-600 font-medium">+25% this month</span>
+                    </div>
+                </div>
+                <div class="w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i data-lucide="brain" class="w-7 h-7 text-purple-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-card group">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Average Score</p>
+                    <p class="stats-value" id="averageScore">--</p>
+                    <div class="flex items-center mt-2">
+                        <i data-lucide="award" class="w-3 h-3 text-orange-500 mr-1"></i>
+                        <span class="text-xs text-orange-600 font-medium">Above target</span>
+                    </div>
+                </div>
+                <div class="w-14 h-14 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <i data-lucide="trending-up" class="w-7 h-7 text-orange-600"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+        <!-- File Upload Section -->
+        <div class="xl:col-span-3 space-y-8">
+            <div class="card">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-1">Upload & Analyze</h2>
+                        <p class="text-gray-600">Upload student data files for AI-powered analysis</p>
+                    </div>
+                    <div class="flex space-x-2 mt-4 sm:mt-0">
+                        <button id="sampleDataBtn" class="btn-ghost">
+                            <i data-lucide="help-circle" class="w-4 h-4 mr-2"></i>
+                            Sample Format
+                        </button>
+                        <button id="historyBtn" class="btn-ghost">
+                            <i data-lucide="history" class="w-4 h-4 mr-2"></i>
+                            History
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Upload Area -->
+                <div id="uploadArea" class="upload-area group">
+                    <div class="text-center">
+                        <div class="mx-auto w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-200 rounded-3xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="upload-cloud" class="w-8 h-8 text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Upload Student Data</h3>
+                        <p class="text-gray-600 mb-4 max-w-md mx-auto">
+                            Drag and drop your Excel or CSV file here, or click to browse.
+                            Supports .xlsx, .xls, .csv files up to 10MB.
+                        </p>
+                        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" class="hidden">
+                        <button type="button" class="btn-primary" id="browseBtn">
+                            <i data-lucide="folder-open" class="w-4 h-4 mr-2"></i>
+                            Choose File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- File Info -->
+                <div id="fileInfo" class="hidden mt-6 p-4 bg-blue-50/80 backdrop-blur-sm rounded-xl border border-blue-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                                <i data-lucide="file-text" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-blue-900" id="fileName"></p>
+                                <p class="text-sm text-blue-600" id="fileSize"></p>
+                            </div>
+                        </div>
+                        <button id="removeFile" class="text-red-600 hover:text-red-700 p-1 hover:bg-red-100 rounded-lg transition-colors">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div id="uploadProgress" class="hidden mt-4">
+                        <div class="flex justify-between text-sm text-blue-700 mb-1">
+                            <span>Uploading...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="w-full bg-blue-200 rounded-full h-2">
+                            <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analyze Button -->
+                <button id="analyzeBtn" class="hidden w-full mt-6 btn-primary group" disabled>
+                        <span class="inline-flex items-center">
+                            <i data-lucide="brain" class="w-5 h-5 mr-2 group-hover:animate-pulse"></i>
+                            <span id="analyzeText">Analyze Data</span>
+                            <div id="analyzeSpinner" class="hidden ml-2 loading-spinner"></div>
+                        </span>
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="hidden">
+                <!-- Analysis Results will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="xl:col-span-1 space-y-6">
+            <!-- AI Chat -->
+            <div class="card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                            <i data-lucide="brain" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900">AI Assistant</h3>
+                    </div>
+                    <button id="clearChatBtn" class="text-gray-400 hover:text-gray-600 p-1 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div id="chatContainer" class="chat-container">
+                    <div class="text-center text-gray-500 text-sm py-8">
+                        <i data-lucide="message-circle" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                        <p>Start a conversation with the AI assistant</p>
+                    </div>
+                </div>
+
+                <div class="flex space-x-2 mt-4">
+                    <div class="flex-1 relative">
+                        <input type="text" id="chatInput" placeholder="Ask about your data..."
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                        <div id="chatTyping" class="hidden absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <div class="loading-dots">
+                                <div class="loading-dot" style="animation-delay: 0s"></div>
+                                <div class="loading-dot" style="animation-delay: 0.1s"></div>
+                                <div class="loading-dot" style="animation-delay: 0.2s"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="sendChatBtn" class="btn-primary px-4 py-3">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                <div class="space-y-3">
+                    <button class="w-full text-left p-3 rounded-xl border border-gray-200 hover:bg-gray-50/80 hover:border-gray-300 transition-all duration-200 group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                                <i data-lucide="download" class="w-4 h-4 text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-900 font-medium">Export Results</p>
+                                <p class="text-xs text-gray-500">Download analysis reports</p>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="w-full text-left p-3 rounded-xl border border-gray-200 hover:bg-gray-50/80 hover:border-gray-300 transition-all duration-200 group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                                <i data-lucide="share-2" class="w-4 h-4 text-green-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-900 font-medium">Share Insights</p>
+                                <p class="text-xs text-gray-500">Share with colleagues</p>
+                            </div>
+                        </div>
+                    </button>
+
+                    <button class="w-full text-left p-3 rounded-xl border border-gray-200 hover:bg-gray-50/80 hover:border-gray-300 transition-all duration-200 group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                                <i data-lucide="help-circle" class="w-4 h-4 text-purple-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-900 font-medium">Help & Tutorials</p>
+                                <p class="text-xs text-gray-500">Get started guide</p>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                <div id="recentActivity" class="space-y-3">
+                    <div class="text-center text-gray-500 text-sm py-4">
+                        <i data-lucide="clock" class="w-6 h-6 mx-auto mb-2 opacity-50"></i>
+                        <p>No recent activity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sample Data Modal -->
+<div id="sampleModal" class="hidden modal-overlay">
+    <div class="modal-content animate-slide-in-up">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-xl font-semibold text-gray-900">Sample Data Format</h3>
+                    <p class="text-gray-600 text-sm mt-1">Use this format for your student data files</p>
+                </div>
+                <button id="closeSampleModal" class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-4 mb-4">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                        <tr class="text-left border-b border-gray-300">
+                            <th class="px-3 py-2 font-semibold text-gray-900">Name</th>
+                            <th class="px-3 py-2 font-semibold text-gray-900">ID</th>
+                            <th class="px-3 py-2 font-semibold text-gray-900">Grade</th>
+                            <th class="px-3 py-2 font-semibold text-gray-900">Attendance</th>
+                            <th class="px-3 py-2 font-semibold text-gray-900">Participation</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-sm text-gray-700">
+                        <tr class="border-b border-gray-200">
+                            <td class="px-3 py-2">John Doe</td>
+                            <td class="px-3 py-2">STU001</td>
+                            <td class="px-3 py-2">85</td>
+                            <td class="px-3 py-2">95</td>
+                            <td class="px-3 py-2">88</td>
+                        </tr>
+                        <tr class="border-b border-gray-200">
+                            <td class="px-3 py-2">Jane Smith</td>
+                            <td class="px-3 py-2">STU002</td>
+                            <td class="px-3 py-2">92</td>
+                            <td class="px-3 py-2">98</td>
+                            <td class="px-3 py-2">95</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2">Mike Johnson</td>
+                            <td class="px-3 py-2">STU003</td>
+                            <td class="px-3 py-2">78</td>
+                            <td class="px-3 py-2">82</td>
+                            <td class="px-3 py-2">75</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 rounded-xl p-4 text-sm text-blue-800">
+                <div class="flex items-start space-x-2">
+                    <i data-lucide="info" class="w-4 h-4 mt-0.5 text-blue-600"></i>
+                    <div>
+                        <p class="font-medium mb-1">Requirements:</p>
+                        <ul class="list-disc list-inside space-y-1 text-blue-700">
+                            <li>Include student names and IDs (required)</li>
+                            <li>Grade columns with numerical values</li>
+                            <li>Optional: Attendance, assignments, participation scores</li>
+                            <li>File formats: .xlsx, .xls, .csv</li>
+                            <li>Maximum file size: 10MB</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast hidden">
+    <div class="flex items-center space-x-3">
+        <div id="toastIcon" class="w-5 h-5 flex-shrink-0"></div>
+        <div class="flex-1 min-w-0">
+            <p id="toastMessage" class="text-sm font-medium truncate"></p>
+        </div>
+        <button id="closeToast" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+            <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+    // Dashboard Controller
+    class DashboardController {
+        constructor() {
+            this.currentAnalysis = null;
+            this.selectedFile = null;
+            this.init();
+        }
+
+        init() {
+            // Check authentication
+            if (!api.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            this.setupUI();
+            this.setupEventListeners();
+            this.loadDashboardData();
+            lucide.createIcons();
+        }
+
+        setupUI() {
+            const user = api.getCurrentUser();
+            if (user) {
+                document.getElementById('userName').textContent = user.name || user.email.split('@')[0];
+                document.getElementById('userAvatar').textContent = (user.name || user.email).charAt(0).toUpperCase();
+            }
+
+            // Set current date
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        setupEventListeners() {
+            // File upload events
+            this.setupFileUploadEvents();
+
+            // UI events
+            this.setupUIEvents();
+
+            // Chat events
+            this.setupChatEvents();
+        }
+
+        setupFileUploadEvents() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseBtn');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const removeFileBtn = document.getElementById('removeFile');
+
+            // Drag and drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) this.handleFile(files[0]);
+            });
+
+            // File selection
+            uploadArea.addEventListener('click', () => fileInput.click());
+            browseBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files[0]) this.handleFile(e.target.files[0]);
+            });
+
+            removeFileBtn.addEventListener('click', this.removeFile.bind(this));
+            analyzeBtn.addEventListener('click', this.analyzeFile.bind(this));
+        }
+
+        setupUIEvents() {
+            // User menu
+            document.getElementById('userMenuBtn').addEventListener('click', this.toggleUserMenu.bind(this));
+            document.getElementById('logoutBtn').addEventListener('click', this.logout.bind(this));
+
+            // Modals
+            document.getElementById('sampleDataBtn').addEventListener('click', this.showSampleModal.bind(this));
+            document.getElementById('closeSampleModal').addEventListener('click', this.hideSampleModal.bind(this));
+
+            // Toast
+            document.getElementById('closeToast').addEventListener('click', this.hideToast.bind(this));
+
+            // Outside clicks
+            document.addEventListener('click', this.handleOutsideClick.bind(this));
+        }
+
+        setupChatEvents() {
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendChatBtn');
+            const clearBtn = document.getElementById('clearChatBtn');
+
+            sendBtn.addEventListener('click', this.sendChatMessage.bind(this));
+            clearBtn.addEventListener('click', this.clearChat.bind(this));
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.sendChatMessage();
+                }
+            });
+        }
+
+        handleFile(file) {
+            // Validate file
+            const validTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-excel', 'text/csv'];
+
+            if (!validTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|csv)$/i)) {
+                this.showToast('Please select a valid Excel or CSV file', 'error');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                this.showToast('File size must be less than 10MB', 'error');
+                return;
+            }
+
+            // Update UI
+            this.selectedFile = file;
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = this.formatFileSize(file.size);
+            document.getElementById('fileInfo').classList.remove('hidden');
+            document.getElementById('analyzeBtn').classList.remove('hidden');
+            document.getElementById('analyzeBtn').disabled = false;
+
+            this.showToast('File selected successfully', 'success');
+        }
+
+        removeFile() {
+            this.selectedFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('analyzeBtn').classList.add('hidden');
+            document.getElementById('uploadProgress').classList.add('hidden');
+        }
+
+        async analyzeFile() {
+            if (!this.selectedFile) return;
+
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const analyzeText = document.getElementById('analyzeText');
+            const analyzeSpinner = document.getElementById('analyzeSpinner');
+            const uploadProgress = document.getElementById('uploadProgress');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+
+            try {
+                // Show loading state
+                analyzeBtn.disabled = true;
+                analyzeText.textContent = 'Analyzing...';
+                analyzeSpinner.classList.remove('hidden');
+                uploadProgress.classList.remove('hidden');
+
+                // Analyze with progress tracking
+                const result = await api.analyzeFile(this.selectedFile, (progress) => {
+                    progressBar.style.width = `${progress}%`;
+                    progressPercent.textContent = `${Math.round(progress)}%`;
+                });
+
+                if (result.success) {
+                    this.currentAnalysis = result;
+                    this.displayResults(result);
+                    this.updateStats();
+                    this.showToast('Analysis completed successfully!', 'success');
+                    this.addRecentActivity('File Analyzed', this.selectedFile.name);
+                    
+                    // Save analysis to localStorage for reports page
+                    this.saveAnalysisToHistory(result);
+                } else {
+                    throw new Error(result.error || 'Analysis failed');
+                }
+
+            } catch (error) {
+                console.error('Analysis error:', error);
+                this.showToast(error.message || 'Analysis failed. Please try again.', 'error');
+            } finally {
+                // Reset UI
+                analyzeBtn.disabled = false;
+                analyzeText.textContent = 'Analyze Data';
+                analyzeSpinner.classList.add('hidden');
+                uploadProgress.classList.add('hidden');
+            }
+        }
+
+        displayResults(data) {
+            const resultsSection = document.getElementById('resultsSection');
+            
+            // Extract data from the correct response structure
+            const totalStudents = data.totalStudents || 0;
+            const totalSubjects = data.totalSubjects || 0;
+            const analysisResults = data.analysisResults || {};
+            const overallAssessment = analysisResults.overallAssessment || {};
+            const individualInsights = analysisResults.individualInsights || [];
+            const patterns = analysisResults.patterns || {};
+            const recommendations = analysisResults.recommendations || {};
+            const insights = analysisResults.insights || [];
+
+            console.log('Displaying results with data:', {
+                totalStudents,
+                totalSubjects,
+                analysisResults,
+                overallAssessment
+            });
+
+            const html = `
+                    <div class="card animate-fade-in">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-900">Analysis Results</h2>
+                            <div class="flex space-x-2">
+                                <button class="btn-secondary" onclick="window.open('${data.downloadUrl || '#'}', '_blank')">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                                    Download PDF
+                                </button>
+                                <button class="btn-secondary">
+                                    <i data-lucide="share-2" class="w-4 h-4 mr-2"></i>
+                                    Share
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Summary Stats -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div class="analysis-metric">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-sm font-semibold text-blue-900 mb-1">Total Students</h3>
+                                        <p class="text-3xl font-bold text-blue-600">${totalStudents}</p>
+                                    </div>
+                                    <i data-lucide="users" class="w-8 h-8 text-blue-500"></i>
+                                </div>
+                            </div>
+                            <div class="analysis-metric bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-sm font-semibold text-green-900 mb-1">Total Subjects</h3>
+                                        <p class="text-3xl font-bold text-green-600">${totalSubjects}</p>
+                                    </div>
+                                    <i data-lucide="book-open" class="w-8 h-8 text-green-500"></i>
+                                </div>
+                            </div>
+                            <div class="analysis-metric bg-gradient-to-br from-purple-50 to-violet-50 border-purple-200">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-sm font-semibold text-purple-900 mb-1">Class Grade</h3>
+                                        <p class="text-3xl font-bold text-purple-600">${overallAssessment.classGrade || 'N/A'}</p>
+                                    </div>
+                                    <i data-lucide="award" class="w-8 h-8 text-purple-500"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${this.renderOverallAssessment(overallAssessment)}
+                        ${this.renderInsightsSection(insights)}
+                        ${this.renderIndividualInsights(individualInsights)}
+                        ${this.renderPatternsSection(patterns)}
+                        ${this.renderRecommendationsSection(recommendations)}
+                    </div>
+                `;
+
+            resultsSection.innerHTML = html;
+            resultsSection.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        renderOverallAssessment(assessment) {
+            if (!assessment || !assessment.summary) return '';
+
+            return `
+                <div class="analysis-section mb-8">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="clipboard-check" class="w-6 h-6 mr-2 text-blue-600"></i>
+                        Overall Assessment
+                    </h3>
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-blue-600">${assessment.classGrade || 'N/A'}</p>
+                                <p class="text-sm text-blue-800">Class Grade</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-blue-600">${assessment.averageScore || 'N/A'}</p>
+                                <p class="text-sm text-blue-800">Average Score</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-blue-600">${assessment.totalStudents || 'N/A'}</p>
+                                <p class="text-sm text-blue-800">Students</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-800">${assessment.summary}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        renderInsightsSection(insights) {
+            if (!insights || !insights.length) return '';
+
+            return `
+                <div class="analysis-section mb-8">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="lightbulb" class="w-6 h-6 mr-2 text-yellow-600"></i>
+                        Key Insights
+                    </h3>
+                    <div class="bg-gradient-to-br from-yellow-50 to-amber-50 border border-yellow-200 rounded-xl p-6">
+                        <div class="space-y-3">
+                            ${insights.map((insight, index) => `
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-yellow-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-0.5">
+                                        ${index + 1}
+                                    </div>
+                                    <p class="text-gray-800">${insight}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        renderIndividualInsights(insights) {
+            if (!insights || !insights.length) return '';
+
+            return `
+                <div class="analysis-section mb-8">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="user-check" class="w-6 h-6 mr-2 text-green-600"></i>
+                        Individual Student Insights
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${insights.slice(0, 6).map(student => `
+                            <div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="font-semibold text-gray-900">${student.studentName || 'Student'}</h4>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                        ${student.averageScore || 'N/A'}
+                                    </span>
+                                </div>
+                                <div class="space-y-2 text-sm">
+                                    ${student.strengths?.length ? `
+                                        <div>
+                                            <span class="text-green-600 font-medium">Strengths:</span>
+                                            <span class="text-gray-700">${student.strengths.join(', ')}</span>
+                                        </div>
+                                    ` : ''}
+                                    ${student.concerns?.length ? `
+                                        <div>
+                                            <span class="text-red-600 font-medium">Concerns:</span>
+                                            <span class="text-gray-700">${student.concerns.join(', ')}</span>
+                                        </div>
+                                    ` : ''}
+                                    ${student.recommendations?.length ? `
+                                        <div>
+                                            <span class="text-blue-600 font-medium">Actions:</span>
+                                            <span class="text-gray-700">${student.recommendations.join(', ')}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ${insights.length > 6 ? `
+                        <div class="text-center mt-4">
+                            <button class="btn-secondary">
+                                <i data-lucide="more-horizontal" class="w-4 h-4 mr-2"></i>
+                                View All ${insights.length} Students
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        renderPatternsSection(patterns) {
+            if (!patterns || (!patterns.strengths?.length && !patterns.weaknesses?.length && !patterns.trends?.length)) return '';
+
+            return `
+                <div class="analysis-section mb-8">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i data-lucide="trending-up" class="w-6 h-6 mr-2 text-indigo-600"></i>
+                        Performance Patterns
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        ${patterns.strengths?.length ? `
+                            <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4">
+                                <h4 class="font-semibold text-green-900 mb-2 flex items-center">
+                                    <i data-lucide="trending-up" class="w-4 h-4 mr-2"></i>
+                                    Strengths
+                                </h4>
+                                <ul class="space-y-1">
+                                    ${patterns.strengths.map(strength => `
+                                        <li class="text-sm text-green-800">• ${strength}</li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        
+                        ${patterns.weaknesses?.length ? `
+                            <div class="bg-gradient-to-br from-red-50 to-rose-50 border border-red-200 rounded-xl p-4">
+                                <h4 class="font-semibold text-red-900 mb-2 flex items-center">
+                                    <i data-lucide="trending-down" class="w-4 h-4 mr-2"></i>
+                                    Areas for Improvement
+                                </h4>
+                                <ul class="space-y-1">
+                                    ${patterns.weaknesses.map(weakness => `
+                                        <li class="text-sm text-red-800">• ${weakness}</li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        
+                        ${patterns.trends?.length ? `
+                            <div class="bg-gradient-to-br from-purple-50 to-violet-50 border border-purple-200 rounded-xl p-4">
+                                <h4 class="font-semibold text-purple-900 mb-2 flex items-center">
+                                    <i data-lucide="activity" class="w-4 h-4 mr-2"></i>
+                                    Trends
+                                </h4>
+                                <ul class="space-y-1">
+                                    ${patterns.trends.map(trend => `
+                                        <li class="text-sm text-purple-800">• ${trend}</li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        renderClustersSection(clusters) {
+            if (!clusters) return '';
+
+            const clusterData = [
+                { name: 'High Performers', count: clusters.highPerformers?.length || 0, color: 'from-green-100 to-emerald-100 border-green-200 text-green-800' },
+                { name: 'Average Performers', count: clusters.averagePerformers?.length || 0, color: 'from-blue-100 to-cyan-100 border-blue-200 text-blue-800' },
+                { name: 'Needs Support', count: clusters.needsSupport?.length || 0, color: 'from-yellow-100 to-amber-100 border-yellow-200 text-yellow-800' },
+                { name: 'At Risk', count: clusters.atRisk?.length || 0, color: 'from-red-100 to-rose-100 border-red-200 text-red-800' }
+            ];
+
+            return `
+                    <div class="analysis-section mb-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                            <i data-lucide="users" class="w-6 h-6 mr-2 text-blue-600"></i>
+                            Performance Clusters
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            ${clusterData.map(cluster => `
+                                <div class="performance-cluster bg-gradient-to-br ${cluster.color}">
+                                    <p class="text-3xl font-bold mb-1">${cluster.count}</p>
+                                    <p class="text-sm font-semibold">${cluster.name}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+        }
+
+        renderStatisticsSection(statistics) {
+            if (!statistics) return '';
+
+            return `
+                    <div class="analysis-section mb-8">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                            <i data-lucide="bar-chart-3" class="w-6 h-6 mr-2 text-blue-600"></i>
+                            Statistical Overview
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            ${Object.keys(statistics).filter(key =>
+                statistics[key] && typeof statistics[key] === 'object' && statistics[key].mean !== undefined
+            ).map(key => `
+                                <div class="bg-gray-50/80 backdrop-blur-sm rounded-xl p-4 border border-gray-200">
+                                    <h4 class="font-semibold text-gray-900 capitalize mb-3 flex items-center">
+                                        <i data-lucide="trending-up" class="w-4 h-4 mr-2 text-blue-600"></i>
+                                        ${key} Statistics
+                                    </h4>
+                                    <div class="grid grid-cols-2 gap-3 text-sm">
+                                        <div class="bg-white/80 rounded-lg p-2">
+                                            <p class="text-gray-600">Mean</p>
+                                            <p class="font-bold text-gray-900">${Math.round(statistics[key].mean * 100) / 100}</p>
+                                        </div>
+                                        <div class="bg-white/80 rounded-lg p-2">
+                                            <p class="text-gray-600">Median</p>
+                                            <p class="font-bold text-gray-900">${Math.round(statistics[key].median * 100) / 100}</p>
+                                        </div>
+                                        <div class="bg-white/80 rounded-lg p-2">
+                                            <p class="text-gray-600">Std Dev</p>
+                                            <p class="font-bold text-gray-900">${Math.round(statistics[key].standardDeviation * 100) / 100}</p>
+                                        </div>
+                                        <div class="bg-white/80 rounded-lg p-2">
+                                            <p class="text-gray-600">Range</p>
+                                            <p class="font-bold text-gray-900">${statistics[key].min} - ${statistics[key].max}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+        }
+
+        renderRecommendationsSection(recommendations) {
+            if (!recommendations) return '';
+
+            const sections = [
+                { key: 'immediate', title: 'Immediate Actions', color: 'red', icon: 'alert-circle' },
+                { key: 'shortTerm', title: 'Short Term Goals', color: 'yellow', icon: 'clock' },
+                { key: 'longTerm', title: 'Long Term Strategy', color: 'green', icon: 'target' }
+            ];
+
+            return `
+                    <div class="analysis-section">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                            <i data-lucide="target" class="w-6 h-6 mr-2 text-green-600"></i>
+                            Recommendations
+                        </h3>
+                        <div class="space-y-4">
+                            ${sections.map(section => {
+                const items = recommendations[section.key];
+                if (!items?.length) return '';
+
+                return `
+                                    <div class="bg-${section.color}-50 border border-${section.color}-200 rounded-xl p-6">
+                                        <h4 class="font-semibold text-${section.color}-900 mb-3 flex items-center">
+                                            <i data-lucide="${section.icon}" class="w-5 h-5 mr-2"></i>
+                                            ${section.title}
+                                        </h4>
+                                        <ul class="space-y-2">
+                                            ${items.map(item => `
+                                                <li class="flex items-start space-x-2 text-${section.color}-800">
+                                                    <i data-lucide="check" class="w-4 h-4 mt-0.5 text-${section.color}-600"></i>
+                                                    <span>${item}</span>
+                                                </li>
+                                            `).join('')}
+                                        </ul>
+                                    </div>
+                                `;
+            }).join('')}
+                        </div>
+                    </div>
+                `;
+        }
+
+        async sendChatMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
+
+            if (!message) return;
+
+            const context = this.currentAnalysis ? { previousAnalysis: this.currentAnalysis } : null;
+
+            // Add user message
+            this.addChatMessage('user', message);
+            chatInput.value = '';
+
+            // Show typing indicator
+            this.showChatTyping(true);
+
+            try {
+                const response = await api.sendChatMessage(message, context);
+
+                if (response.success) {
+                    this.addChatMessage('assistant', response.response, response);
+                } else {
+                    this.addChatMessage('system', 'Sorry, I encountered an error. Please try again.');
+                }
+            } catch (error) {
+                this.addChatMessage('system', `Error: ${error.message}`);
+            } finally {
+                this.showChatTyping(false);
+            }
+        }
+
+        addChatMessage(type, content, extras = {}) {
+            const chatContainer = document.getElementById('chatContainer');
+
+            // Remove empty state
+            const emptyState = chatContainer.querySelector('.text-center');
+            if (emptyState) emptyState.remove();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `animate-fade-in`;
+
+            if (type === 'user') {
+                messageDiv.innerHTML = `
+                        <div class="chat-message-user">
+                            <div class="chat-bubble-user">
+                                <p class="text-sm">${this.escapeHtml(content)}</p>
+                                <p class="text-xs text-blue-100 mt-1">${new Date().toLocaleTimeString()}</p>
+                            </div>
+                        </div>
+                    `;
+            } else if (type === 'assistant') {
+                messageDiv.innerHTML = `
+                        <div class="chat-message-assistant">
+                            <div class="chat-bubble-assistant">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mr-2">
+                                        <i data-lucide="brain" class="w-3 h-3 text-white"></i>
+                                    </div>
+                                    <span class="text-xs text-gray-500 font-medium">EDU_AID</span>
+                                </div>
+                                <p class="text-sm text-gray-800 mb-2">${this.escapeHtml(content)}</p>
+
+                                ${extras.insights?.length ? `
+                                    <div class="mt-3 p-2 bg-purple-50 rounded-lg border-l-2 border-purple-300">
+                                        <p class="text-xs font-semibold text-purple-800 mb-1">🔍 Key Insights:</p>
+                                        <ul class="text-xs text-purple-700 space-y-1">
+                                            ${extras.insights.map(insight => `<li>• ${this.escapeHtml(insight)}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                ` : ''}
+
+                                ${extras.followUpQuestions?.length ? `
+                                    <div class="mt-3 flex flex-wrap gap-1">
+                                        ${extras.followUpQuestions.map(q => `
+                                            <button class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition-colors"
+                                                    onclick="document.getElementById('chatInput').value='${this.escapeHtml(q)}'; document.getElementById('chatInput').focus();">
+                                                ${this.escapeHtml(q)}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
+
+                                <p class="text-xs text-gray-400 mt-2">${new Date().toLocaleTimeString()}</p>
+                            </div>
+                        </div>
+                    `;
+            } else if (type === 'system') {
+                messageDiv.innerHTML = `
+                        <div class="flex justify-center">
+                            <div class="px-3 py-1 bg-red-100 border border-red-300 rounded-full">
+                                <p class="text-xs text-red-700">${this.escapeHtml(content)}</p>
+                            </div>
+                        </div>
+                    `;
+            }
+
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            lucide.createIcons();
+        }
+
+        showChatTyping(show) {
+            const chatTyping = document.getElementById('chatTyping');
+            const sendBtn = document.getElementById('sendChatBtn');
+
+            if (show) {
+                chatTyping.classList.remove('hidden');
+                sendBtn.disabled = true;
+            } else {
+                chatTyping.classList.add('hidden');
+                sendBtn.disabled = false;
+            }
+        }
+
+        async clearChat() {
+            try {
+                await api.clearChatHistory();
+                const chatContainer = document.getElementById('chatContainer');
+                chatContainer.innerHTML = `
+                        <div class="text-center text-gray-500 text-sm py-8">
+                            <i data-lucide="message-circle" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                            <p>Start a conversation with the AI assistant</p>
+                        </div>
+                    `;
+                this.showToast('Chat history cleared', 'success');
+                lucide.createIcons();
+            } catch (error) {
+                this.showToast('Failed to clear chat history', 'error');
+            }
+        }
+
+        updateStats() {
+            // Mock stats update
+            document.getElementById('totalAnalyses').textContent = Math.floor(Math.random() * 50) + 10;
+            document.getElementById('studentsAnalyzed').textContent = Math.floor(Math.random() * 500) + 100;
+            document.getElementById('aiInsights').textContent = Math.floor(Math.random() * 25) + 5;
+            document.getElementById('averageScore').textContent = (75 + Math.random() * 20).toFixed(1) + '%';
+        }
+
+        addRecentActivity(type, description) {
+            const activities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+            activities.unshift({
+                type,
+                description,
+                timestamp: new Date().toISOString()
+            });
+            activities.splice(10); // Keep only 10
+            localStorage.setItem('recentActivities', JSON.stringify(activities));
+            this.loadRecentActivity();
+        }
+
+        saveAnalysisToHistory(analysisResult) {
+            const analysisHistory = JSON.parse(localStorage.getItem('analysis_history') || '[]');
+            
+            const analysisRecord = {
+                sessionId: analysisResult.sessionId,
+                fileName: this.selectedFile.name,
+                fileSize: this.selectedFile.size,
+                totalStudents: analysisResult.totalStudents,
+                totalSubjects: analysisResult.totalSubjects,
+                analysisResults: analysisResult.analysisResults,
+                overallAssessment: analysisResult.overallAssessment,
+                individualInsights: analysisResult.individualInsights,
+                patterns: analysisResult.patterns,
+                recommendations: analysisResult.recommendations,
+                insights: analysisResult.insights,
+                confidence: analysisResult.confidence,
+                timestamp: analysisResult.timestamp || new Date().toISOString(),
+                downloadUrl: analysisResult.downloadUrl,
+                isFavorite: false
+            };
+
+            // Add to beginning of array (most recent first)
+            analysisHistory.unshift(analysisRecord);
+            
+            // Keep only last 50 analyses
+            analysisHistory.splice(50);
+            
+            localStorage.setItem('analysis_history', JSON.stringify(analysisHistory));
+            console.log('Analysis saved to history:', analysisRecord);
+            
+            // Notify analytics page if it's open
+            if (window.analytics && typeof window.analytics.refreshFromDashboard === 'function') {
+                window.analytics.refreshFromDashboard();
+            }
+        }
+
+        loadRecentActivity() {
+            const activities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+            const container = document.getElementById('recentActivity');
+
+            if (activities.length === 0) {
+                container.innerHTML = `
+                        <div class="text-center text-gray-500 text-sm py-4">
+                            <i data-lucide="clock" class="w-6 h-6 mx-auto mb-2 opacity-50"></i>
+                            <p>No recent activity</p>
+                        </div>
+                    `;
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = activities.map(activity => `
+                    <div class="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50/80 transition-colors">
+                        <div class="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">${activity.type}</p>
+                            <p class="text-xs text-gray-500 truncate">${activity.description}</p>
+                        </div>
+                        <div class="text-xs text-gray-400">
+                            ${this.formatTimeAgo(activity.timestamp)}
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        async loadDashboardData() {
+            try {
+                await api.healthCheck();
+                this.updateStats();
+                this.loadRecentActivity();
+            } catch (error) {
+                console.warn('Dashboard data loading failed:', error);
+                this.updateStats(); // Use mock data
+            }
+        }
+
+        // UI Helper Methods
+        toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('hidden');
+        }
+
+        logout() {
+            api.logout();
+            window.location.href = 'login.html';
+        }
+
+        showSampleModal() {
+            document.getElementById('sampleModal').classList.remove('hidden');
+        }
+
+        hideSampleModal() {
+            document.getElementById('sampleModal').classList.add('hidden');
+        }
+
+        handleOutsideClick(e) {
+            const userDropdown = document.getElementById('userDropdown');
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const sampleModal = document.getElementById('sampleModal');
+
+            if (!userMenuBtn.contains(e.target)) {
+                userDropdown.classList.add('hidden');
+            }
+
+            if (e.target === sampleModal) {
+                this.hideSampleModal();
+            }
+        }
+
+        showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            const config = {
+                success: { icon: 'check-circle', color: 'text-green-600' },
+                error: { icon: 'x-circle', color: 'text-red-600' },
+                warning: { icon: 'alert-triangle', color: 'text-yellow-600' },
+                info: { icon: 'info', color: 'text-blue-600' }
+            };
+
+            const { icon, color } = config[type] || config.info;
+
+            toastMessage.textContent = message;
+            toastIcon.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5 ${color}"></i>`;
+
+            toast.classList.remove('hidden', 'toast-enter');
+            toast.classList.add('toast-enter-active');
+
+            setTimeout(() => this.hideToast(), 5000);
+            lucide.createIcons();
+        }
+
+        hideToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('toast-enter');
+            toast.classList.remove('toast-enter-active');
+            setTimeout(() => toast.classList.add('hidden'), 300);
+        }
+
+        // Utility Methods
+        formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        formatTimeAgo(timestamp) {
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diff = now - time;
+
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (days > 0) return `${days}d ago`;
+            if (hours > 0) return `${hours}h ago`;
+            if (minutes > 0) return `${minutes}m ago`;
+            return 'Just now';
+        }
+
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    }
+
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+        window.dashboard = new DashboardController();
+    });
+</script>
+</body>
+</html>

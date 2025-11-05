@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDU_AID - Sign Up</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-indigo-100 flex items-center justify-center min-h-screen p-4">
+    <!-- Main container: Centered, responsive -->
+    <div class="bg-white p-8 rounded-xl shadow-2xl max-w-md w-full mx-auto transform transition-all hover:scale-[1.01]">
+        <div class="text-center mb-8">
+            <i class="fas fa-user-plus text-4xl text-blue-600 mb-4"></i>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2" aria-label="Create Account">Create Account</h1>
+            <p class="text-gray-600">Join our learning community today</p>
+        </div>
+        
+        <!-- Signup form -->
+        <div class="space-y-4" aria-live="polite" id="form-messages">
+            <!-- Messages for errors/success -->
+        </div>
+        <form id="signup-form" class="space-y-4">
+            <div>
+                <label for="username" class="block text-gray-700" aria-label="Username">Username</label>
+                <input type="text" id="username" name="username" required
+                       class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       aria-required="true" placeholder="Choose a username">
+            </div>
+            <div>
+                <label for="email" class="block text-gray-700" aria-label="Email address">Email</label>
+                <input type="email" id="email" name="email" required
+                       class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       aria-required="true" placeholder="Enter your email">
+            </div>
+            <div>
+                <label for="password" class="block text-gray-700" aria-label="Password">Password</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       aria-required="true" placeholder="Create a password">
+            </div>
+            <button type="submit"
+                    class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-300"
+                    aria-label="Create account">Sign Up</button>
+        </form>
+
+        <p class="text-center mt-4">
+            Already have an account? <a href="login.html" class="text-blue-500 hover:underline" aria-label="Go to login page">Login</a>
+        </p>
+    </div>
+
+    <!-- JavaScript for form submission -->
+    <script src="js/auth.js"></script>
+    <script>
+        // Initialize signup form handler
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            // Delegate to auth.js for signup logic
+            await signupUser();
+        });
+    </script>
+</body>
+</html>
