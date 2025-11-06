@@ -816,7 +816,7 @@
 
             // If it's a real download URL from the backend
             if (report.downloadUrl.startsWith('/api/')) {
-                window.open(`http://localhost:5000${report.downloadUrl}`, '_blank');
+                window.open(`https://edu-aid.onrender.com${report.downloadUrl}`, '_blank');
                 this.showToast('Downloading PDF report...', 'success');
             } else {
                 // Generate and download a simple report

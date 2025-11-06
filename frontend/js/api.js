@@ -1,6 +1,6 @@
 // API Configuration
 const API_CONFIG = {
-    BASE_URL: 'http://localhost:5000/api',
+    BASE_URL: 'https://edu-aid.onrender.com/api',
     TIMEOUT: 30000,
     RETRY_ATTEMPTS: 3,
     RETRY_DELAY: 1000
@@ -8,7 +8,7 @@ const API_CONFIG = {
 
 class ApiService {
     constructor() {
-        this.baseUrl = 'http://localhost:5000/api';
+        this.baseUrl = 'https://edu-aid.onrender.com/api';
         this.token = localStorage.getItem('token');
         this.requestQueue = new Map();
     }

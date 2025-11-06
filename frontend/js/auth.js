@@ -23,14 +23,6 @@ const MOCK_USERS = {
         name: 'Teacher Demo',
         role: 'teacher',
         avatar: 'T'
-    },
-    'student@edu-aid.com': {
-        id: 'student_001',
-        email: 'student@edu-aid.com',
-        password: 'student123',
-        name: 'Student Demo',
-        role: 'student',
-        avatar: 'S'
     }
 };
 

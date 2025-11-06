@@ -96,7 +96,7 @@ mkdir -p logs
 node server.js
 
 # In another terminal, test Gemini
-curl http://localhost:5000/test-gemini
+curl https://edu-aid.onrender.com/test-gemini
 ```
 
 ### 6. Run the Server
@@ -117,7 +117,7 @@ The frontend uses vanilla JavaScript, just serve it with Live Server or any stat
 ### 2. Update API Base URL
 Make sure `frontend/js/api.js` points to your backend:
 ```javascript
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://edu-aid.onrender.com/api';
 ```
 
 ## Troubleshooting

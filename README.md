@@ -64,7 +64,7 @@ echo "GEMINI_API_KEY=your_api_key_here" >> backend/.env
 cd backend
 python app.py
 ```
-The server will start at `http://localhost:5000`
+The server will start at `https://edu-aid.onrender.com`
 
 ### Frontend Setup
 

@@ -1,9 +1,9 @@
-import { api } from './api.js';
+// Chat functionality for EDU_AID dashboard
 
 let fileToAnalyze = null;
 let currentAnalysis = null;
 
-export async function handleFileUpload(file) {
+async function handleFileUpload(file) {
     try {
         // Show loading state
         showLoadingState();
@@ -33,7 +33,7 @@ export async function handleFileUpload(file) {
     }
 }
 
-export async function handleChatMessage(message) {
+async function handleChatMessage(message) {
     try {
         const response = await api.sendChatMessage(message, currentAnalysis);
         appendMessage(message, 'user');

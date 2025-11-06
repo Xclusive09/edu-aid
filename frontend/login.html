@@ -5,56 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EDU_AID - Login</title>
 
-  <!-- Tailwind + Custom Styles -->
-  <link href="css/styles.css" rel="stylesheet" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    window.tailwind = window.tailwind || {};
+    window.tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out',
+            'slide-down': 'slideInDown 0.4s ease-out',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            slideInDown: {
+              '0%': { opacity: '0', transform: 'translateY(-10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
 
-  <!-- Lucide Icons (UMD) -->
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
   <!-- Google Fonts: Inter -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <meta name="description" content="EDU_AID - AI-Powered Educational Analytics Platform" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>Graduation Cap</text></svg>" />
-
-  <style>
-    .bg-pattern {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    }
-    .animate-fade-in { animation: fadeIn 0.6s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-    .animate-slide-in-down { animation: slideInDown 0.4s ease-out; }
-    @keyframes slideInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
-    .loading-spinner {
-      width: 1rem; height: 1rem; border: 2px solid #fff; border-top-color: transparent;
-      border-radius: 50%; animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .toast { @apply fixed bottom-6 right-6 bg-white shadow-xl rounded-xl p-4 flex items-center gap-3 max-w-sm transition-all; }
-    .toast-enter { opacity: 0; transform: translateY(20px); }
-    .toast-enter-active { opacity: 1; transform: none; }
-  </style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>Cap</text></svg>" />
 </head>
 
-<body class="min-h-screen flex items-center justify-center px-4 bg-pattern font-sans">
+<body class="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-100 font-sans">
 
-  <!-- Animated Background -->
-  <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute -top-32 -right-32 w-96 h-96 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-3xl animate-pulse"></div>
-    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-gradient-to-tr from-indigo-400 to-cyan-500 rounded-full opacity-20 blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+  <!-- Animated Background Blobs -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-3xl animate-pulse-slow"></div>
+    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-gradient-to-tr from-indigo-400 to-cyan-500 rounded-full opacity-20 blur-3xl animate-pulse-slow" style="animation-delay: 1.5s;"></div>
   </div>
 
   <!-- Login Card -->
   <div class="relative w-full max-w-md animate-fade-in">
-    <div class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/20">
+    <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/30">
 
       <!-- Header -->
-      <div class="text-center mb-8">
-        <div class="mx-auto w-20 h-20 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-3xl flex items-center justify-center mb-6 shadow-xl">
-          <span class="text-3xl">Graduation Cap</span>
+      <div class="text-center mb-10">
+        <div class="mx-auto w-24 h-24 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-[2rem] flex items-center justify-center mb-6 shadow-xl transform hover:scale-105 transition-all duration-300">
+          <i data-lucide="graduation-cap" class="w-14 h-14 text-white"></i>
         </div>
-        <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">EDU_AID</h1>
-        <p class="text-gray-600 font-medium">Educational AI Assistant</p>
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+          EDU_AID
+        </h1>
+        <p class="text-gray-600 text-sm">AI-Powered Educational Analytics</p>
       </div>
 
       <!-- Form -->
@@ -68,7 +77,7 @@
           <div class="relative">
             <i data-lucide="at-sign" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
             <input type="email" id="email" required
-                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                   class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 placeholder:text-gray-400"
                    placeholder="admin@edu-aid.com" autocomplete="email" />
           </div>
         </div>
@@ -82,10 +91,10 @@
           <div class="relative">
             <i data-lucide="key" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
             <input type="password" id="password" required
-                   class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                   class="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200"
                    placeholder="••••••••" autocomplete="current-password" />
             <button type="button" id="togglePassword"
-                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 transition">
               <i data-lucide="eye" class="w-5 h-5"></i>
             </button>
           </div>
@@ -93,19 +102,19 @@
 
         <!-- Remember + Forgot -->
         <div class="flex items-center justify-between text-sm">
-          <label class="flex items-center cursor-pointer">
-            <input type="checkbox" id="rememberMe" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500" />
+          <label class="flex items-center cursor-pointer select-none">
+            <input type="checkbox" id="rememberMe" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500 border-gray-300" />
             <span class="ml-2 text-gray-700">Remember me</span>
           </label>
-          <a href="#" class="text-blue-600 hover:text-blue-500 font-medium">Forgot password?</a>
+          <a href="#" class="text-blue-600 hover:text-blue-500 font-medium transition">Forgot password?</a>
         </div>
 
-        <!-- Submit -->
+        <!-- Submit Button -->
         <button type="submit" id="loginBtn"
-                class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all group flex items-center justify-center">
-          <span id="loginText">Sign In</span>
-          <i data-lucide="arrow-right" class="ml-2 w-5 h-5 group-hover:translate-x-1 transition"></i>
-          <div id="loginSpinner" class="hidden ml-2 loading-spinner"></div>
+                class="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 group flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed">
+          <span id="loginText" class="transition-opacity">Sign In</span>
+          <i data-lucide="arrow-right" class="ml-2 w-5 h-5 opacity-0 group-hover:opacity-100 translate-x-0 group-hover:translate-x-1 transition-all duration-300"></i>
+          <div id="loginSpinner" class="hidden ml-2 w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
         </button>
       </form>
 
@@ -115,26 +124,23 @@
           <i data-lucide="info" class="w-5 h-5 text-blue-600 mx-auto"></i>
           <p class="text-xs font-semibold text-blue-900 mt-1">Test Accounts</p>
         </div>
-        <div class="space-y-2 text-xs">
-          <div class="bg-white/70 p-2 rounded border">
-            <strong>Admin:</strong> admin@edu-aid.com / admin123
+        <div class="space-y-2 text-xs font-medium">
+          <div class="bg-white/70 p-2 rounded border border-blue-100 hover:bg-white/90 transition-colors cursor-default">
+            <strong class="text-blue-900">Admin:</strong> admin@edu-aid.com / admin123
           </div>
-          <div class="bg-white/70 p-2 rounded border">
-            <strong>Teacher:</strong> teacher@edu-aid.com / teacher123
-          </div>
-          <div class="bg-white/70 p-2 rounded border">
-            <strong>Student:</strong> student@edu-aid.com / student123
+          <div class="bg-white/70 p-2 rounded border border-blue-100 hover:bg-white/90 transition-colors cursor-default">
+            <strong class="text-blue-900">Teacher:</strong> teacher@edu-aid.com / teacher123
           </div>
         </div>
       </div>
 
       <!-- Messages -->
-      <div id="errorMessage" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2">
+      <div id="errorMessage" class="hidden mt-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 animate-fade-in">
         <i data-lucide="alert-circle" class="w-5 h-5 text-red-600"></i>
         <span id="errorText" class="text-sm text-red-800 font-medium"></span>
       </div>
 
-      <div id="successMessage" class="hidden mt-4 p-3 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2">
+      <div id="successMessage" class="hidden mt-4 p-3 bg-green-50 border border-green-200 rounded-xl flex items-center gap-2 animate-fade-in">
         <i data-lucide="check-circle" class="w-5 h-5 text-green-600"></i>
         <span class="text-sm text-green-800 font-medium">Login successful! Redirecting...</span>
       </div>
@@ -142,26 +148,24 @@
 
     <!-- Footer -->
     <p class="text-center mt-6 text-xs text-gray-500">
-      © 2025 EDU_AID. Powered by Google Gemini AI.
+      © 2025 EDU_AID. All rights reserved.
     </p>
   </div>
 
-  <!-- Toast -->
-  <div id="toast" class="toast hidden toast-enter">
-    <div class="flex items-center gap-3">
-      <div id="toastIcon"></div>
-      <p id="toastMessage" class="text-sm font-medium"></p>
-      <button id="closeToast" class="text-gray-400 hover:text-gray-600">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
-    </div>
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-white shadow-2xl rounded-xl p-4 flex items-center gap-3 max-w-sm transition-all duration-300 opacity-0 translate-y-4 hidden">
+    <div id="toastIcon"></div>
+    <p id="toastMessage" class="text-sm font-medium text-gray-800"></p>
+    <button id="closeToast" class="text-gray-400 hover:text-gray-600 transition">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
   </div>
 
   <!-- Scripts -->
   <script src="js/auth.js"></script>
   <script src="js/api.js"></script>
   <script>
-    // Initialize Lucide
+    // Initialize Lucide Icons
     lucide.createIcons();
 
     class LoginManager {
@@ -169,34 +173,29 @@
 
       init() {
         console.log('Initializing login page...');
-        
-        // Check localStorage contents
+        this.checkExistingSession();
+        this.setupEvents();
+      }
+
+      checkExistingSession() {
         const token = localStorage.getItem('token');
         const user = localStorage.getItem('user');
-        console.log('Found token:', !!token, 'Found user:', !!user);
-        
-        // Only redirect if both token and user exist AND token is valid
+
         if (token && user) {
           try {
-            const tokenData = JSON.parse(atob(token));
-            if (tokenData.exp > Date.now()) {
-              console.log('Valid session found, redirecting to dashboard');
+            // For mock auth, token is just base64 encoded JSON
+            if (payload.exp * 1000 > Date.now()) {
+              console.log('Valid session, redirecting...');
               window.location.href = 'dashboard.html';
               return;
             } else {
-              console.log('Token expired, clearing session');
-              localStorage.removeItem('token');
-              localStorage.removeItem('user');
+              localStorage.clear();
             }
-          } catch (error) {
-            console.log('Invalid token, clearing session');
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+          } catch (e) {
+            localStorage.clear();
           }
         }
-        
-        console.log('User not authenticated, showing login form');
-        this.setupEvents();
+        console.log('No valid session. Showing login form.');
       }
 
       setupEvents() {
@@ -221,20 +220,45 @@
         this.hideMessages();
 
         try {
-          const res = await api.login(email, password);
+          // Mock authentication with test accounts
+          const mockUsers = {
+            'admin@edu-aid.com': { password: 'admin123', role: 'admin', name: 'Admin User' },
+            'teacher@edu-aid.com': { password: 'teacher123', role: 'teacher', name: 'Teacher User' }
+          };
 
-          // Extend token if "Remember Me"
+          const user = mockUsers[email];
+          
+          if (!user || user.password !== password) {
+            throw new Error('Invalid credentials');
+          }
+
+          // Create mock token
+          const mockToken = btoa(JSON.stringify({
+            email,
+            role: user.role,
+            name: user.name,
+            exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24 hours
+          }));
+
+          // Store mock auth data
+          localStorage.setItem('token', mockToken);
+          localStorage.setItem('user', JSON.stringify({
+            email,
+            role: user.role,
+            name: user.name
+          }));
+
           if (remember) {
-            const token = localStorage.getItem('token');
-            const payload = JSON.parse(atob(token.split('.')[0])); // rough decode
-            payload.exp = Date.now() + 30 * 24 * 60 * 60 * 1000;
-            localStorage.setItem('token', btoa(JSON.stringify(payload)));
+            // For mock auth, extend expiry to 30 days
+            const mockData = JSON.parse(atob(mockToken));
+            mockData.exp = Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60);
+            localStorage.setItem('token', btoa(JSON.stringify(mockData)));
           }
 
           this.showSuccess();
           setTimeout(() => window.location.href = 'dashboard.html', 1200);
         } catch (err) {
-          this.showError(err.message || 'Login failed');
+          this.showError(err.message || 'Login failed. Please try again.');
           this.setLoading(false);
         }
       }
@@ -242,22 +266,32 @@
       togglePassword() {
         const field = document.getElementById('password');
         const icon = document.querySelector('#togglePassword i');
-        const isPass = field.type === 'password';
-        field.type = isPass ? 'text' : 'password';
-        icon.setAttribute('data-lucide', isPass ? 'eye-off' : 'eye');
+        const isPassword = field.type === 'password';
+        field.type = isPassword ? 'text' : 'password';
+        icon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
         lucide.createIcons();
       }
 
       setLoading(loading) {
-        const btn = document.getElementById('loginBtn');
-        const text = document.getElementById('loginText');
-        const spin = document.getElementById('loginSpinner');
-        const arrow = document.querySelector('#loginBtn i[data-lucide="arrow-right"]');
+        const elements = {
+          btn: document.getElementById('loginBtn'),
+          text: document.getElementById('loginText'),
+          spin: document.getElementById('loginSpinner'),
+          arrow: document.querySelector('#loginBtn i[data-lucide="arrow-right"]')
+        };
 
-        btn.disabled = loading;
-        text.textContent = loading ? 'Signing in...' : 'Sign In';
-        spin.classList.toggle('hidden', !loading);
-        arrow.classList.toggle('hidden', loading);
+        // Check if all elements exist
+        if (!elements.btn || !elements.text || !elements.spin || !elements.arrow) {
+          console.error('Login button elements not found');
+          return;
+        }
+
+        elements.btn.disabled = loading;
+        elements.text.textContent = loading ? 'Signing in...' : 'Sign In';
+        elements.text.classList.toggle('opacity-0', loading);
+        elements.spin.classList.toggle('hidden', !loading);
+        elements.arrow.classList.toggle('opacity-0', loading);
+        elements.arrow.classList.toggle('opacity-100', !loading);
       }
 
       showError(msg) {
@@ -284,8 +318,8 @@
 
         msgEl.textContent = msg;
         iconEl.innerHTML = `<i data-lucide="${icons[type]}" class="w-5 h-5 ${colors[type]}"></i>`;
-        toast.classList.remove('hidden', 'toast-enter');
-        toast.classList.add('toast-enter-active');
+        toast.classList.remove('hidden', 'opacity-0', 'translate-y-4');
+        toast.classList.add('opacity-100', 'translate-y-0');
         lucide.createIcons();
 
         setTimeout(() => this.hideToast(), 3000);
@@ -293,14 +327,16 @@
 
       hideToast() {
         const toast = document.getElementById('toast');
-        toast.classList.remove('toast-enter-active');
-        toast.classList.add('toast-enter');
+        toast.classList.add('opacity-0', 'translate-y-4');
         setTimeout(() => toast.classList.add('hidden'), 300);
       }
     }
 
     // Start
-    document.addEventListener('DOMContentLoaded', () => new LoginManager());
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      new LoginManager();
+    });
   </script>
 </body>
 </html>
