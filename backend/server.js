@@ -28,10 +28,12 @@ app.use('/api/', limiter);
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:5500', 'https://edu-aid.onrender.com'],
+    origin: ['http://localhost:3000', 'http://127.0.0.1:5500', 'https://edu-aid.onrender.com', 'https://edu-aid-alpha.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range'],
+    credentials: true,
+    maxAge: 600
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -52,6 +54,9 @@ const upload = multer({
         cb(null, allowed);
     }
 });
+
+// Enable pre-flight requests for all routes
+app.options('*', cors());
 
 // Import middleware
 const { auth } = require('./middleware/auth');
@@ -154,7 +159,7 @@ app.get('/test-gemini', async (req, res) => {
 });
 
 // ANALYZE EXCEL FILE (Main Feature)
-app.post('/api/analyze-excel', upload.single('file'), async (req, res) => {
+app.post('/api/analyze-excel', cors(), upload.single('file'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ success: false, error: 'No file uploaded' });
     }
