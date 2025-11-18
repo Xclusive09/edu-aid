@@ -63,6 +63,8 @@ router.post('/analyze', upload.single('file'), async (req, res) => {
     // -------------------------------------------------
     // 4. SEND RESPONSE (complete analysis data)
     // -------------------------------------------------
+    const aiPowered = analysis.analysisResults?.aiPowered !== false;
+    
     res.json({
       success: true,
       sessionId,
@@ -77,8 +79,11 @@ router.post('/analyze', upload.single('file'), async (req, res) => {
       recommendations: analysis.analysisResults?.recommendations,
       insights: analysis.analysisResults?.insights,
       confidence: analysis.analysisResults?.confidence,
-      message:
-        'File analyzed successfully! You can now ask questions about this analysis or download a PDF report.',
+      aiPowered: aiPowered,
+      analysisType: aiPowered ? 'AI-Powered (Gemini 2.5)' : 'Rule-Based (Fallback)',
+      message: aiPowered 
+        ? 'File analyzed successfully with AI! You can now ask questions about this analysis or download a PDF report.'
+        : 'File analyzed with rule-based system. Configure GEMINI_API_KEY for AI-powered insights. You can still download a PDF report.',
       timestamp: analysis.timestamp || new Date().toISOString(),
       downloadUrl: `/api/analysis/download-pdf/${sessionId}`
     });
@@ -290,31 +295,114 @@ async function generateAnalysisPDF(analysisResults, sessionId) {
 
             doc.moveDown(2);
 
-            // Individual Student Insights
+            // Individual Student Insights with Course Recommendations
             if (analysisResults.analysisResults?.individualInsights?.length > 0) {
                 doc.fontSize(18)
                    .font('Helvetica-Bold')
-                   .text('Individual Student Insights');
+                   .text('Individual Student Course Recommendations');
 
                 doc.moveDown();
-                doc.fontSize(12)
-                   .font('Helvetica');
-
-                analysisResults.analysisResults.individualInsights.slice(0, 10).forEach((student, index) => {
-                    doc.text(`Student ${index + 1}:`, { continued: false });
-                    doc.text(`  Strengths: ${student.strengths?.join(', ') || 'N/A'}`);
-                    doc.text(`  Concerns: ${student.concerns?.join(', ') || 'N/A'}`);
-                    doc.text(`  Recommendations: ${student.recommendations?.join(', ') || 'N/A'}`);
+                
+                const insights = analysisResults.analysisResults.individualInsights;
+                const maxStudentsInPdf = 20; // Limit to prevent PDF from being too large
+                
+                insights.slice(0, maxStudentsInPdf).forEach((student, index) => {
+                    // Add new page for each student (except first)
+                    if (index > 0) {
+                        doc.addPage();
+                    }
+                    
+                    // Student Header
+                    doc.fontSize(16)
+                       .font('Helvetica-Bold')
+                       .text(`Student: ${student.studentName || `Student ${index + 1}`}`);
+                    
                     doc.moveDown(0.5);
+                    
+                    // Performance Summary
+                    doc.fontSize(12)
+                       .font('Helvetica')
+                       .text(`Average Score: ${student.averageScore || 'N/A'}%`);
+                    
+                    if (student.strengths && student.strengths.length > 0) {
+                        doc.text(`Top Strengths: ${student.strengths.join(', ')}`);
+                    }
+                    
+                    if (student.insight) {
+                        doc.moveDown(0.5);
+                        doc.fontSize(11)
+                           .font('Helvetica-Oblique')
+                           .text(`Insight: ${student.insight}`);
+                    }
+                    
+                    doc.moveDown();
+                    
+                    // Course Recommendations
+                    const courseRecommendations = student.courseRecommendations || student.recommendations || [];
+                    
+                    if (courseRecommendations.length > 0) {
+                        doc.fontSize(14)
+                           .font('Helvetica-Bold')
+                           .text('Recommended University Courses:');
+                        
+                        doc.moveDown(0.5);
+                        
+                        courseRecommendations.forEach((course, courseIndex) => {
+                            if (typeof course === 'string') {
+                                // Handle simple string recommendations
+                                doc.fontSize(11)
+                                   .font('Helvetica')
+                                   .text(`${courseIndex + 1}. ${course}`);
+                            } else if (typeof course === 'object' && course.course) {
+                                // Handle detailed course object
+                                doc.fontSize(12)
+                                   .font('Helvetica-Bold')
+                                   .text(`${courseIndex + 1}. ${course.course}`);
+                                
+                                doc.fontSize(11)
+                                   .font('Helvetica');
+                                
+                                if (course.university) {
+                                    doc.text(`   Universities: ${course.university}`);
+                                }
+                                
+                                if (course.reason) {
+                                    doc.text(`   Why: ${course.reason}`);
+                                }
+                                
+                                if (course.jamb_cutoff) {
+                                    doc.text(`   JAMB Cutoff: ${course.jamb_cutoff}`);
+                                }
+                                
+                                if (course.waec_required) {
+                                    doc.text(`   WAEC Requirements: ${course.waec_required}`);
+                                }
+                                
+                                doc.moveDown(0.5);
+                            }
+                        });
+                    } else {
+                        doc.fontSize(11)
+                           .font('Helvetica-Oblique')
+                           .text('No specific course recommendations available.');
+                    }
                 });
+                
+                if (insights.length > maxStudentsInPdf) {
+                    doc.addPage();
+                    doc.fontSize(12)
+                       .font('Helvetica-Oblique')
+                       .text(`Note: This report includes ${maxStudentsInPdf} of ${insights.length} students. Please contact your administrator for the complete analysis.`);
+                }
             }
 
             // Footer
+            doc.moveDown(2);
             doc.fontSize(10)
                .font('Helvetica')
-               .text('Generated by EDU-AID - Educational Analysis Platform', {
-                   align: 'center',
-                   baseline: 'bottom'
+               .fillColor('#666666')
+               .text('Generated by EDU-AID - Educational AI Analysis Platform', {
+                   align: 'center'
                });
 
             doc.end();

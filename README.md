@@ -6,14 +6,16 @@ An intelligent educational platform powered by Google's Gemini AI that analyzes 
 
 - 🔒 Secure JWT-based authentication system
 - 📊 Excel/CSV file upload and advanced data analysis
-- 🧠 Gemini AI-powered educational insights
-- 📈 Performance tracking with ML-based analysis
-- 🎯 Smart, personalized recommendations
+- 🧠 **Gemini AI 2.5-powered educational insights** (REQUIRES API KEY)
+- 🎓 Personalized Nigerian university course recommendations
+- 📈 Performance tracking with AI-based analysis
+- 🎯 Smart, data-driven recommendations with JAMB/WAEC info
 - 💬 Interactive AI chat interface with context awareness
 - 📋 Comprehensive student performance metrics
 - 🔄 Real-time data processing and visualization
 - 📱 Responsive design for all devices
-- 🔍 Deep learning pattern recognition
+- 📄 Professional PDF report generation
+- 🔍 SS1-SS3 academic performance pattern recognition
 
 ## Architecture
 
@@ -55,9 +57,12 @@ pip install -r backend/requirements.txt
 # Create .env file
 cp backend/.env.example backend/.env
 
-# Add your Gemini AI API key
-echo "GEMINI_API_KEY=your_api_key_here" >> backend/.env
+# Edit backend/.env and add your Gemini AI API key
+# Get your key from: https://makersuite.google.com/app/apikey
+# GEMINI_API_KEY=your_actual_api_key_here
 ```
+
+**⚠️ IMPORTANT:** GEMINI_API_KEY is REQUIRED for production use. Without it, the system will use a basic rule-based fallback (NOT recommended).
 
 4. Run the Flask server:
 ```bash
@@ -153,17 +158,23 @@ pytest tests/
 
 ## Production Deployment
 
-For production:
-1. Replace mock authentication with proper user management
-2. Set up environment variables for sensitive data
-3. Use a production-grade server (e.g., Gunicorn)
-4. Set up proper CORS configuration
-5. Implement rate limiting
-6. Add proper error logging
-7. Set up monitoring and analytics
-8. Implement data backup strategy
-9. Use SSL/TLS encryption
-10. Configure proper security headers
+For production deployment, see [DEPLOYMENT.md](DEPLOYMENT.md) for comprehensive guide.
+
+**Critical Requirements:**
+1. ✅ Configure GEMINI_API_KEY (required for AI analysis)
+2. ✅ Set secure JWT_SECRET
+3. ✅ Enable HTTPS/SSL encryption
+4. ✅ Configure proper CORS origins
+5. ✅ Set up rate limiting
+6. ✅ Enable error logging and monitoring
+7. ✅ Implement data backup strategy
+8. ✅ Replace mock authentication with real user management
+9. ✅ Configure security headers (helmet.js)
+10. ✅ Test with actual student data
+
+**System Status Indicators:**
+- 🟢 **AI-Powered**: Gemini API key configured, full AI analysis enabled
+- 🟡 **Rule-Based**: No API key, using fallback logic (not recommended for production)
 
 ## Contributing
 

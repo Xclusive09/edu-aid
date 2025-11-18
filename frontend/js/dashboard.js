@@ -192,11 +192,33 @@ class DashboardController {
     const individuals = a.individualInsights || [];
     const patterns = a.patterns || {};
     const recommendations = a.recommendations || {};
+    const aiPowered = data.aiPowered !== false;
+    const analysisType = data.analysisType || (aiPowered ? 'AI-Powered' : 'Rule-Based');
 
     const html = `
       <div class="card animate-fade-in">
         <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-bold text-gray-900">Analysis Results</h2>
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900">Analysis Results</h2>
+            <div class="flex items-center space-x-2 mt-2">
+              ${aiPowered ? `
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md">
+                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
+                  ${analysisType}
+                </span>
+              ` : `
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-300">
+                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  ${analysisType}
+                </span>
+                <span class="text-xs text-gray-500">⚙️ Configure GEMINI_API_KEY for AI insights</span>
+              `}
+            </div>
+          </div>
           <div class="flex space-x-2">
             <button class="btn-secondary" onclick="window.open('${data.downloadUrl || '#'}','_blank')">
               <i data-lucide="download" class="w-4 h-4 mr-2"></i> Download PDF
@@ -298,6 +320,10 @@ renderIndividualInsights(list) {
           const concerns  = formatArray(s.concerns);
           const actions   = formatArray(s.actions || s.recommendations); // some APIs use "recommendations"
 
+          // Use courseRecommendations if available, fallback to recommendations
+          const courseRecs = s.courseRecommendations || s.recommendations || [];
+          const hasDetailedCourses = courseRecs.length > 0 && typeof courseRecs[0] === 'object' && courseRecs[0].course;
+
           return `
             <div class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-gray-50 to-white">
               <div class="flex items-center justify-between mb-3">
@@ -306,12 +332,18 @@ renderIndividualInsights(list) {
               </div>
 
               <div class="space-y-2 text-sm">
-                ${strengths ? `<div><span class="text-green-600 font-medium">Strengths:</span> <span class="text-gray-700">${strengths}</span></div>` : ''}
-                ${concerns  ? `<div><span class="text-red-600 font-medium">Concerns:</span> <span class="text-gray-700">${concerns}</span></div>` : ''}
-                ${s.recommendations ? `
+                ${strengths ? `<div><span class="text-green-600 font-medium">💪 Strengths:</span> <span class="text-gray-700">${strengths}</span></div>` : ''}
+                ${s.insight ? `<div class="mt-2 p-2 bg-blue-50 rounded-lg"><span class="text-blue-600 font-medium">💡 Insight:</span> <span class="text-gray-700">${s.insight}</span></div>` : ''}
+                ${concerns  ? `<div><span class="text-red-600 font-medium">⚠️ Concerns:</span> <span class="text-gray-700">${concerns}</span></div>` : ''}
+                ${hasDetailedCourses ? `
                   <div class="mt-4 space-y-3">
-                    <div class="font-medium text-blue-600 mb-2">Recommended Courses:</div>
-                    ${s.recommendations.map((rec, idx) => `
+                    <div class="font-medium text-purple-600 mb-2 flex items-center">
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                      </svg>
+                      Recommended University Courses:
+                    </div>
+                    ${courseRecs.map((rec, idx) => `
                       <div class="bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-200 rounded-lg p-3 hover:shadow-md transition-shadow">
                         <div class="flex items-start justify-between mb-2">
                           <div class="flex items-start space-x-2">
@@ -321,7 +353,10 @@ renderIndividualInsights(list) {
                             <div>
                               <h5 class="font-bold text-gray-900 text-sm">${rec.course}</h5>
                               <p class="text-xs text-gray-600 mt-1">
-                                <i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i>
+                                <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
                                 ${rec.university}
                               </p>
                             </div>
@@ -332,15 +367,24 @@ renderIndividualInsights(list) {
                         </div>
                         <div class="ml-7">
                           <p class="text-xs text-gray-700 mb-1">
-                            <i data-lucide="info" class="w-3 h-3 inline mr-1 text-indigo-600"></i>
+                            <svg class="w-3 h-3 inline mr-1 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
                             ${rec.reason}
                           </p>
                           <p class="text-xs text-gray-600">
-                            <span class="font-medium">WAEC Required:</span> ${rec.waec_required}
+                            <span class="font-medium">📋 WAEC Required:</span> ${rec.waec_required}
                           </p>
                         </div>
                       </div>
                     `).join('')}
+                  </div>
+                ` : courseRecs.length > 0 ? `
+                  <div class="mt-3">
+                    <div class="font-medium text-purple-600 mb-1">Recommendations:</div>
+                    <ul class="text-xs text-gray-700 list-disc list-inside space-y-1">
+                      ${courseRecs.map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>
                   </div>
                 ` : ''}
               </div>
