@@ -5,15 +5,17 @@ const XLSX = require('xlsx');
 class AIAnalyzer {
   constructor() {
     if (!process.env.GEMINI_API_KEY) {
-      console.warn('⚠️  GEMINI_API_KEY not found. AI features will use fallback analysis.');
+      console.error('❌ GEMINI_API_KEY not found! AI analysis is DISABLED.');
+      console.error('   Please configure GEMINI_API_KEY in .env file for production use.');
+      console.error('   The system will fall back to rule-based analysis (NOT recommended).');
       this.genAI = null;
       this.model = null;
     } else {
       try {
         this.genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        // Use gemini-1.5-flash model with proper configuration
+        // Use gemini-2.5-flash model with proper configuration
         this.model = this.genAI.getGenerativeModel({
-          model: 'gemini-1.5-flash',
+          model: 'gemini-2.5-flash',
           generationConfig: { 
             temperature: 0.7, 
             maxOutputTokens: 8192,
@@ -21,9 +23,10 @@ class AIAnalyzer {
             topP: 0.95
           }
         });
-        console.log('✅ Gemini AI initialized successfully');
+        console.log('✅ Gemini AI (2.5-flash) initialized successfully - AI-powered analysis ENABLED');
       } catch (error) {
         console.error('❌ Failed to initialize Gemini AI:', error.message);
+        console.error('   AI analysis is DISABLED. System will use rule-based fallback.');
         this.genAI = null;
         this.model = null;
       }
@@ -137,13 +140,15 @@ class AIAnalyzer {
   async analyzeWithAI(data, context = {}) {
     // Check if AI is available
     if (!this.model) {
-      console.log('⚠️  AI model not available, using comprehensive analysis...');
-      return this.createComprehensiveAnalysis(data, context);
+      console.error('⚠️  AI model not available! GEMINI_API_KEY is required for production use.');
+      console.log('📊 Using rule-based analysis as fallback (NOT recommended for production)...');
+      return this.createComprehensiveAnalysis(data, context, false); // false = not using AI
     }
 
     try {
       const prompt = this.buildAnalysisPrompt(data, context);
       console.log('📝 Generated prompt length:', prompt.length);
+      console.log('🤖 Calling Gemini AI for analysis...');
       
       // Set a timeout for the AI request
       const timeout = new Promise((_, reject) => 
@@ -156,16 +161,19 @@ class AIAnalyzer {
       const response = await result.response;
       const text = response.text();
       
-      console.log('✅ AI response received, length:', text.length);
+      console.log('✅ AI response received successfully, length:', text.length);
       console.log('📄 AI response preview:', text.substring(0, 200));
       
       // Check if response is empty or invalid
       if (!text || text.trim().length === 0) {
         console.error('❌ Empty response from Gemini API');
-        return this.createComprehensiveAnalysis(data, context);
+        console.log('📊 Using rule-based analysis as fallback...');
+        return this.createComprehensiveAnalysis(data, context, false);
       }
       
-      return this.parseAnalysisResponse(text);
+      const parsedResult = this.parseAnalysisResponse(text);
+      parsedResult.aiPowered = true;
+      return parsedResult;
     } catch (error) {
       console.error('❌ AI analysis error:', error.message);
       
@@ -178,8 +186,8 @@ class AIAnalyzer {
         console.error('⏱️  Request timeout: AI service took too long to respond.');
       }
       
-      console.log('📊 Using comprehensive fallback analysis...');
-      return this.createComprehensiveAnalysis(data, context);
+      console.log('📊 Using rule-based analysis as fallback (NOT recommended for production)...');
+      return this.createComprehensiveAnalysis(data, context, false);
     }
   }
 
@@ -235,7 +243,7 @@ class AIAnalyzer {
     };
   }
 
-  createComprehensiveAnalysis(data, context) {
+  createComprehensiveAnalysis(data, context, aiPowered = false) {
     const studentCount = Object.keys(data).length;
     const subjects = new Set();
     let totalScoreSum = 0;
@@ -313,7 +321,7 @@ class AIAnalyzer {
         classGrade,
         averageScore: averageScore.toFixed(1),
         totalStudents: studentCount,
-        summary: `Class of ${studentCount} students shows ${classGrade} performance with ${averageScore.toFixed(1)}% average across ${subjects.size} subjects. University course recommendations generated for all students based on individual strengths.`
+        summary: `Class of ${studentCount} students shows ${classGrade} performance with ${averageScore.toFixed(1)}% average across ${subjects.size} subjects. University course recommendations generated for all students based on individual strengths.${!aiPowered ? ' (Note: Using rule-based analysis. Configure GEMINI_API_KEY for AI-powered insights.)' : ''}`
       },
       individualInsights,
       studentRecommendations, // Add this for compatibility
@@ -346,7 +354,8 @@ class AIAnalyzer {
         strongSubjects.length > 0 ? `Strongest subjects: ${strongSubjects.join(', ')}` : 'No dominant strong subjects identified',
         `${Math.round((individualInsights.filter(s => parseFloat(s.averageScore) >= 70).length / studentCount) * 100)}% of students performing at or above 70%`
       ],
-      confidence: 0.8
+      confidence: aiPowered ? 0.95 : 0.75,
+      aiPowered: aiPowered
     };
   }
 
@@ -598,7 +607,7 @@ IMPORTANT:
         classGrade,
         averageScore: overallAverage.toFixed(1),
         totalStudents,
-        summary: `Analysis completed for ${totalStudents} students. Class average: ${overallAverage.toFixed(1)}%. University course recommendations provided for each student based on SS1-SS3 performance.`
+        summary: `Analysis completed for ${totalStudents} students using AI-powered insights. Class average: ${overallAverage.toFixed(1)}%. University course recommendations provided for each student based on SS1-SS3 performance.`
       },
       individualInsights: studentArray.map(student => ({
         studentName: student.student_id,
@@ -611,7 +620,8 @@ IMPORTANT:
       patterns: this.extractPatterns(studentArray),
       recommendations: this.generateRecommendations(studentArray),
       insights: this.generateInsights(studentArray),
-      confidence: 0.9,
+      confidence: 0.95,
+      aiPowered: true,
       studentRecommendations: studentArray // Keep original format for detailed view
     };
   }
