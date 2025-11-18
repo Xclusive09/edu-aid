@@ -300,11 +300,11 @@ class ApiService {
     }
 
     // Chat Methods
-    async sendChatMessage(message, context = null) {
+    async sendChatMessage(message, sessionId = null) {
         try {
             return await this.request('/chat/send', {
                 method: 'POST',
-                body: JSON.stringify({ message, context })
+                body: JSON.stringify({ message, sessionId })
             });
         } catch (error) {
             // Mock chat response
