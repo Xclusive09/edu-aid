@@ -6,6 +6,7 @@
 class DashboardController {
   constructor() {
     this.currentAnalysis = null;
+    this.currentSessionId = null;
     this.selectedFile = null;
     this.init();
   }
@@ -160,8 +161,10 @@ class DashboardController {
 
       if (result.success) {
         this.currentAnalysis = result;
+        this.currentSessionId = result.sessionId;
         this.displayResults(result);
         this.updateStats();
+        this.updateChatStatus(true);
         this.showToast('Analysis completed successfully!', 'success');
         this.addRecentActivity('File Analyzed', this.selectedFile.name);
         this.saveAnalysisToHistory(result);
@@ -448,20 +451,49 @@ renderIndividualInsights(list) {
   /*---------------------------------------------------------------*/
   /*  Chat                                                         */
   /*---------------------------------------------------------------*/
+  updateChatStatus(hasAnalysis) {
+    const container = document.getElementById('chatContainer');
+    const statusHtml = hasAnalysis 
+      ? `<div class="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg text-center">
+           <div class="flex items-center justify-center space-x-2">
+             <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+             <p class="text-sm text-green-800 font-medium">Connected to analysis data</p>
+           </div>
+           <p class="text-xs text-green-600 mt-1">Ask me anything about the analyzed data!</p>
+         </div>`
+      : `<div class="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-center">
+           <p class="text-sm text-blue-800 font-medium">💬 General Assistant Mode</p>
+           <p class="text-xs text-blue-600 mt-1">Upload data to get specific insights</p>
+         </div>`;
+    
+    // Remove any existing status message
+    const existingStatus = container.querySelector('.mb-3.p-3.bg-green-50, .mb-3.p-3.bg-blue-50');
+    if (existingStatus) {
+      existingStatus.remove();
+    }
+    
+    // Add new status at the top
+    container.insertAdjacentHTML('afterbegin', statusHtml);
+  }
+
   async sendChatMessage() {
     const input = document.getElementById('chatInput');
     const msg = input.value.trim();
     if (!msg) return;
 
-    const context = this.currentAnalysis ? { previousAnalysis: this.currentAnalysis } : null;
     this.addChatMessage('user', msg);
     input.value = '';
     this.showChatTyping(true);
 
     try {
-      const resp = await api.sendChatMessage(msg, context);
-      if (resp.success) this.addChatMessage('assistant', resp.response, resp);
-      else this.addChatMessage('system', 'Sorry, something went wrong.');
+      const resp = await api.sendChatMessage(msg, this.currentSessionId);
+      if (resp.success) {
+        const message = resp.message || resp.response;
+        const hasContext = resp.hasAnalysisContext;
+        this.addChatMessage('assistant', message, { ...resp, hasAnalysisContext: hasContext });
+      } else {
+        this.addChatMessage('system', 'Sorry, something went wrong.');
+      }
     } catch (e) {
       this.addChatMessage('system', `Error: ${e.message}`);
     } finally {
@@ -489,11 +521,14 @@ renderIndividualInsights(list) {
       div.innerHTML = `
         <div class="chat-message-assistant">
           <div class="chat-bubble-assistant">
-            <div class="flex items-center mb-2">
-              <div class="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mr-2">
-                <i data-lucide="brain" class="w-3 h-3 text-white"></i>
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center">
+                <div class="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mr-2">
+                  <i data-lucide="brain" class="w-3 h-3 text-white"></i>
+                </div>
+                <span class="text-xs text-gray-500 font-medium">EDU_AID</span>
               </div>
-              <span class="text-xs text-gray-500 font-medium">EDU_AID</span>
+              ${extras.hasAnalysisContext ? `<span class="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full font-medium">📊 Data-aware</span>` : ''}
             </div>
             <p class="text-sm text-gray-800 mb-2">${this.escapeHtml(content)}</p>
             ${extras.insights?.length ? `<div class="mt-3 p-2 bg-purple-50 rounded-lg border-l-2 border-purple-300">
@@ -602,6 +637,7 @@ renderIndividualInsights(list) {
     try { await api.healthCheck(); } catch (e) { console.warn('Health check failed', e); }
     this.updateStats();
     this.loadRecentActivity();
+    this.updateChatStatus(false);
   }
 
   /*---------------------------------------------------------------*/
